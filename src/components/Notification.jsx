@@ -23,22 +23,25 @@ const TextSection = styled.div`
   flex-direction: column;
   gap: 8px;
   color: #ffffff;
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: 300;
   p {
     margin: 0;
-    line-height: 1.5;
+    line-height: 1.4;
   }
 `;
+
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 `;
 const Icon = styled.img``;
 const Highlight1 = styled.span`
   font-weight: 600;
 `;
 const Highlight2 = styled.span`
-  font-weight: 600;
+  font-weight: 500;
   color: #fddb3a;
 `;

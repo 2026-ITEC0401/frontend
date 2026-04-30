@@ -18,6 +18,7 @@ const Container = styled.div`
   background-color: #41444b;
   padding: 0px 20px;
 `;
+
 const ToggleButton = styled.button`
   width: 90px;
   height: 32px;
@@ -42,8 +43,9 @@ const ToggleButton = styled.button`
     /* 나중에 클릭 시 부드럽게 움직이도록 애니메이션 추가 */
   }
 `;
+
 const Text = styled.p`
   color: #ffffff;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 24px;
+  font-weight: 500;
 `;
