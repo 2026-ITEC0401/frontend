@@ -23,7 +23,7 @@ const textBlink = keyframes`
 
 const ALERT_CONFIG = {
   Urgent: {
-    color: "220, 38, 38",
+    color: "239, 68, 68",
     title: "긴급 상황 발생",
     icon: (
       <img
@@ -36,7 +36,7 @@ const ALERT_CONFIG = {
     vibratePattern: [500, 200, 500, 200, 500], // 강한 진동 반복
   },
   Visitor: {
-    color: "37, 99, 235", // Blue
+    color: "59, 130, 246", // Blue
     title: "도어락 감지",
     icon: (
       <img
@@ -49,7 +49,7 @@ const ALERT_CONFIG = {
     vibratePattern: [200, 100, 200], // 짧게 두 번
   },
   Appliance: {
-    color: "130, 226, 26", // Yellow
+    color: "22, 163, 74", // Yellow
     title: "생활 기기 알림",
     icon: (
       <img
@@ -113,7 +113,7 @@ export default function FullScreenAlert({ alertData, onClose }) {
 
 // --- Styled Components ---
 const Overlay = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -129,6 +129,12 @@ const Overlay = styled.div`
   transition: all 0.3s ease-in-out;
 
   box-sizing: border-box;
+
+  margin: 0 auto;
+  width: 100%;
+  max-width: 390px;
+
+  padding-bottom: 40vh;
 `;
 
 const AlertContainer = styled.div`
