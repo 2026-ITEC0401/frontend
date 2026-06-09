@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import UrgentImg from "../assets/Urgent_icon.svg";
-import GeneralImg from "../assets/GeneraL_icon.svg";
+import GeneralImg from "../assets/General_icon.svg";
 
 export default function AlertCard({ time, location, sound, type }) {
   const isUrgent = type === "Urgent";
