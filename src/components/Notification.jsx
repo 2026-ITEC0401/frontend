@@ -1,47 +1,48 @@
 import styled from "@emotion/styled";
 import bellImg from "@/assets/bell.svg";
 
-export default function Notification({ userName, unreadCount }) {
+export default function Notification({ unreadCount }) {
   return (
     <Container>
       <TextSection>
         <p>
-          <Highlight1>{userName}</Highlight1>님,
-          <br />
           확인하지 않은
           <br />
-          <Highlight2>{unreadCount}개의 알람</Highlight2>이 있어요!
+          <Highlight>{unreadCount}개의 알람</Highlight>이 있어요!
         </p>
       </TextSection>
-      <Icon src={bellImg}></Icon>
+      <Icon src={bellImg} alt="알람 아이콘" />
     </Container>
   );
 }
-
-const TextSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  color: #ffffff;
-  font-size: 24px;
-  font-weight: 300;
-  p {
-    margin: 0;
-    line-height: 1.4;
-  }
-`;
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 12px;
 `;
-const Icon = styled.img``;
-const Highlight1 = styled.span`
+
+const TextSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 300;
+
+  p {
+    margin: 0;
+    line-height: 1.4; /* 줄간격을 조금 더 여유롭게 줍니다 */
+  }
+`;
+
+const Highlight = styled.span`
   font-weight: 600;
 `;
-const Highlight2 = styled.span`
-  font-weight: 500;
-  color: #fddb3a;
+
+// 💡 종 이미지가 카드를 뚫고 나가지 않도록 크기를 딱 잡아줍니다.
+const Icon = styled.img`
+  width: 70px;
+  height: auto;
+  object-fit: contain;
 `;

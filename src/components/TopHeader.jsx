@@ -1,12 +1,19 @@
 import styled from "@emotion/styled";
-import logoImg from "@/assets/logo.svg";
 import userImg from "@/assets/user.svg";
+import alertImg from "@/assets/alert-main.svg";
 
-export default function TopHeader() {
+export default function TopHeader({ userName }) {
   return (
     <Container>
-      <Logo src={logoImg}></Logo>
-      <Profile src={userImg}></Profile>
+      <Info>
+        <Profile src={userImg}></Profile>
+        <Text>
+          안녕하세요
+          <br />
+          <span>{userName}</span>님
+        </Text>
+      </Info>
+      <Alert src={alertImg}></Alert>
     </Container>
   );
 }
@@ -14,17 +21,36 @@ export default function TopHeader() {
 const Container = styled.header`
   display: flex;
   justify-content: space-between;
+  padding: 0 8px;
   align-items: center;
 `;
-const Logo = styled.img`
-  width: auto;
+
+const Profile = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
   cursor: pointer;
 `;
-const Profile = styled.img`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #d9d9d9;
+
+const Text = styled.p`
+  margin: 0;
+  padding: 0;
+  line-height: 1.35;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 300;
+
+  span {
+    font-weight: 600;
+  }
+`;
+const Alert = styled.img`
   cursor: pointer;
-  object-fit: cover;
+`;
+const Info = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
 `;
