@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import styled from "@emotion/styled";
-import { css, keyframes } from "@emotion/react";
+import { keyframes } from "@emotion/react";
 import FireImg from "../assets/fire.svg";
 import RockImg from "../assets/rock.png";
-import WashImg from "../assets/wash.png";
+import CheckImg from "../assets/check.png";
+import NoiseImg from "../assets/noise.png";
 
 // --- Animations & Config ---
 const pulse = keyframes`
@@ -23,8 +24,8 @@ const textBlink = keyframes`
 
 const ALERT_CONFIG = {
   Urgent: {
-    color: "239, 68, 68",
-    title: "긴급 상황 발생",
+    color: "239, 68, 68", // 빨강
+    title: "긴급 상황 감지",
     icon: (
       <img
         src={FireImg}
@@ -36,8 +37,8 @@ const ALERT_CONFIG = {
     vibratePattern: [500, 200, 500, 200, 500], // 강한 진동 반복
   },
   Visitor: {
-    color: "59, 130, 246", // Blue
-    title: "도어락 감지",
+    color: "59, 130, 246", // 파랑
+    title: "방문 감지",
     icon: (
       <img
         src={RockImg}
@@ -45,16 +46,30 @@ const ALERT_CONFIG = {
         style={{ width: "12rem", height: "12rem" }}
       />
     ),
-    animation: `${slideDown} 0.5s ease-out`,
+    animation: `${pulse} 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite`,
     vibratePattern: [200, 100, 200], // 짧게 두 번
   },
   Appliance: {
-    color: "22, 163, 74", // Yellow
-    title: "생활 기기 알림",
+    color: "22, 163, 74", // 초록
+    title: "기기 알림 감지",
     icon: (
       <img
-        src={WashImg}
-        alt="잠금 아이콘"
+        src={CheckImg}
+        alt="체크 아이콘"
+        style={{ width: "12rem", height: "12rem" }}
+      />
+    ),
+    animation: `${slideDown} 0.5s ease-out`,
+    vibratePattern: [300], // 짧게 한 번
+  },
+
+  Noise: {
+    color: "242, 181, 11", // 노랑
+    title: "주변 소음 감지",
+    icon: (
+      <img
+        src={NoiseImg}
+        alt="소음 아이콘"
         style={{ width: "12rem", height: "12rem" }}
       />
     ),
@@ -96,7 +111,7 @@ export default function FullScreenAlert({ alertData, onClose }) {
       <AlertContainer animationRule={config.animation}>
         <IconWrapper>{config.icon}</IconWrapper>
 
-        <Title $isUrgent={type === "Urgent"}>{config.title}</Title>
+        <Title>{config.title}</Title>
         <SubText>{sound} </SubText>
 
         <InfoText>
@@ -155,12 +170,7 @@ const Title = styled.h1`
   letter-spacing: 0.05em;
   margin-bottom: -1rem;
   text-transform: uppercase;
-
-  ${(props) =>
-    props.$isUrgent &&
-    css`
-      animation: ${textBlink} 0.8s ease-in-out infinite;
-    `}
+  animation: ${textBlink} 0.8s ease-in-out infinite;
 `;
 
 const SubText = styled.p`
