@@ -6,7 +6,7 @@ import RockImg from "../assets/rock.png";
 import CheckImg from "../assets/check.png";
 import NoiseImg from "../assets/noise.png";
 
-// --- Animations & Config ---
+// --- Animations & Config ---  연동확인
 const pulse = keyframes`
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.05); opacity: 0.9; }
