@@ -9,12 +9,14 @@ import {
 
 import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import TopHeader from "@/components/TopHeader";
-import AlertCard from "@/components/AlertCard";
-import Notification from "@/components/Notification";
-import Room from "@/components/Room";
-import Footer from "@/components/Footer";
-import FullScreenAlert from "@/components/FullScreenAlert";
+import TopHeader from "../components/TopHeader";
+import AlertCard from "../components/AlertCard";
+import Notification from "../components/Notification";
+import Room from "../components/Room";
+import Footer from "../components/Footer";
+import FullScreenAlert from "../components/FullScreenAlert";
+import { type RoomDevice } from "../types/room";
+import { type AlertWebData, type AlertServerData } from "../types/alert";
 
 // true : 목업 데이터 사용 false : Firebase 서버 연결
 const IS_MOCK_MODE = false;
@@ -23,12 +25,12 @@ const IS_MOCK_MODE = false;
 
 // 1. 유저 정보 데이터 (TopHeader & Notification 영역)
 const mockUserInfo = {
-  userName: "홍한희",
+  userName: "장원석",
   unreadCount: 3,
 };
 
 // 2. 기기 연결 상태 데이터 (DivideConnect 영역)
-const mockDeviceData = [
+const mockDeviceData: RoomDevice[] = [
   { name: "현관", isConnected: true },
   { name: "거실", isConnected: true },
   { name: "안방", isConnected: true },
@@ -36,7 +38,7 @@ const mockDeviceData = [
 ];
 
 // 3. 실시간 소리 알림 데이터 (SoundAlarm 영역)
-const mockAlertData = [
+const mockAlertData: AlertWebData[] = [
   {
     id: 1,
     time: "오전 08:00",
@@ -53,13 +55,6 @@ const mockAlertData = [
   },
   {
     id: 3,
-    time: "오전 10:23",
-    location: "화장실",
-    sound: "세탁 완료",
-    type: "Appliance", // 노랑 (생활 기기)
-  },
-  {
-    id: 4,
     time: "오후 02:22",
     location: "현관",
     sound: "아기 울음",
@@ -69,8 +64,10 @@ const mockAlertData = [
 
 export default function MainPage() {
   // 초기화 값 : null (꺼짐)
-  const [currentAlert, setCurrentAlert] = useState(null);
-  const [alertList, setAlertList] = useState(IS_MOCK_MODE ? mockAlertData : []);
+  const [currentAlert, setCurrentAlert] = useState<null | AlertWebData>(null);
+  const [alertList, setAlertList] = useState<AlertWebData[]>(
+    IS_MOCK_MODE ? mockAlertData : [],
+  );
 
   useEffect(() => {
     // 💡 스위치가 true(목업 모드)일 때는 서버 연결 코드를 무시하고 빠져나갑니다.
@@ -92,7 +89,7 @@ export default function MainPage() {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           // 파이어베이스에서 막 도착한 순수 원본 데이터
-          const serverData = change.doc.data();
+          const serverData = change.doc.data() as AlertServerData;
 
           // 🚨 F12 관리자 모드 콘솔창에 데이터 찍기
           console.log("====================================");
@@ -103,9 +100,9 @@ export default function MainPage() {
           if (serverData.time) {
             let dateObj;
 
-            if (serverData.time.toDate) {
+            if (typeof serverData.time !== "number") {
               dateObj = serverData.time.toDate();
-            } else if (typeof serverData.time === "number") {
+            } else {
               dateObj = new Date(
                 serverData.time.toString().length === 10
                   ? serverData.time * 1000
@@ -199,12 +196,6 @@ export default function MainPage() {
             </TestButton>
             <TestButton
               onClick={() => setCurrentAlert(mockAlertData[2])}
-              style={{ background: "#82E21A", color: "#000" }}
-            >
-              기기
-            </TestButton>
-            <TestButton
-              onClick={() => setCurrentAlert(mockAlertData[3])}
               style={{ background: "#F2B50B", color: "#000" }}
             >
               소음
