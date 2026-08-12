@@ -3,8 +3,7 @@ import livingRoom from "@/assets/living.svg";
 import bedRoom from "@/assets/bed.svg";
 import bathRoom from "@/assets/wash.png";
 import frontDoor from "@/assets/door.svg";
-
-type RoomLabel = "거실" | "안방" | "화장실" | "현관";
+import { type RoomLabel } from "../types/room";
 
 interface RoomProps {
   name: RoomLabel;

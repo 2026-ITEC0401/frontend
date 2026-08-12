@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import FireImg from "../assets/fire.svg";
 import RockImg from "../assets/rock.png";
-import CheckImg from "../assets/check.png";
 import NoiseImg from "../assets/noise.png";
 import { type AlertWebData } from "../types/alert";
 
@@ -54,19 +53,6 @@ const ALERT_CONFIG = {
     ),
     animation: `${pulse} 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite`,
     vibratePattern: [200, 100, 200], // 짧게 두 번
-  },
-  Appliance: {
-    color: "22, 163, 74", // 초록
-    title: "기기 알림 감지",
-    icon: (
-      <img
-        src={CheckImg}
-        alt="체크 아이콘"
-        style={{ width: "12rem", height: "12rem" }}
-      />
-    ),
-    animation: `${slideDown} 0.5s ease-out`,
-    vibratePattern: [300], // 짧게 한 번
   },
 
   Noise: {
