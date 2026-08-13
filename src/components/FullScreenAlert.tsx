@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-import styled from "@emotion/styled";
-import { keyframes } from "@emotion/react";
 import FireImg from "../assets/fire.svg";
 import RockImg from "../assets/rock.png";
 import NoiseImg from "../assets/noise.png";
@@ -12,20 +10,7 @@ interface FullScreenAlertProps {
 }
 
 // --- Animations & Config ---  연동확인
-const pulse = keyframes`
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.05); opacity: 0.9; }
-`;
-
-const slideDown = keyframes`
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-`;
-
-const textBlink = keyframes`
-  0%, 100% { opacity: 1;  }
-  50% { opacity: 0.3; text-shadow: none; }
-`;
+// pulse / slideDown / textBlink keyframes는 src/styles/global.css에 정의되어 있습니다.
 
 const ALERT_CONFIG = {
   Urgent: {
@@ -38,7 +23,7 @@ const ALERT_CONFIG = {
         style={{ width: "12rem", height: "12rem" }}
       />
     ),
-    animation: `${pulse} 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite`,
+    animation: "pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
     vibratePattern: [500, 200, 500, 200, 500], // 강한 진동 반복
   },
   Visitor: {
@@ -51,7 +36,7 @@ const ALERT_CONFIG = {
         style={{ width: "12rem", height: "12rem" }}
       />
     ),
-    animation: `${pulse} 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite`,
+    animation: "pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
     vibratePattern: [200, 100, 200], // 짧게 두 번
   },
 
@@ -65,7 +50,7 @@ const ALERT_CONFIG = {
         style={{ width: "12rem", height: "12rem" }}
       />
     ),
-    animation: `${slideDown} 0.5s ease-out`,
+    animation: "slideDown 0.5s ease-out",
     vibratePattern: [300], // 짧게 한 번
   },
 };
@@ -102,124 +87,32 @@ export default function FullScreenAlert({
   if (!alertData || !config) return null;
 
   return (
-    <Overlay themeColor={config.color}>
-      <AlertContainer animationRule={config.animation}>
-        <IconWrapper>{config.icon}</IconWrapper>
+    <div
+      className="fixed inset-0 z-[9999] box-border mx-auto flex w-full max-w-[390px] flex-col items-center justify-center pb-[40vh] backdrop-blur-md transition-all duration-300 ease-in-out"
+      style={{ backgroundColor: `rgba(${config.color}, 0.95)` }}
+    >
+      <div className="mt-[40vh] flex flex-col items-center p-12 text-center text-white">
+        <div className="mb-4 flex h-[15rem] w-[15rem] items-center justify-center rounded-full bg-[rgba(255,255,255,0.8)] text-[10rem]">
+          {config.icon}
+        </div>
 
-        <Title>{config.title}</Title>
-        <SubText>{sound} </SubText>
+        <h1 className="animate-text-blink mb-2 text-5xl font-extrabold tracking-wider uppercase">
+          {config.title}
+        </h1>
+        <p className="mb-6 text-[2rem] font-bold">{sound} </p>
 
-        <InfoText>
+        <div className="mb-6 w-full rounded-full bg-[rgba(0,0,0,0.2)] px-0 py-[1.7rem] text-[1.7rem] font-medium">
           {location} / {time}
-        </InfoText>
+        </div>
 
-        <CloseButton themeColor={config.color} onClick={onClose}>
+        <button
+          className="w-full cursor-pointer rounded-full border-none bg-white px-0 py-[1.6rem] text-[1.8rem] font-extrabold shadow-[0_10px_25px_rgba(0,0,0,0.1)] transition-transform duration-200 hover:scale-105 active:scale-95"
+          style={{ color: `rgb(${config.color})` }}
+          onClick={onClose}
+        >
           확인 및 닫기
-        </CloseButton>
-      </AlertContainer>
-    </Overlay>
+        </button>
+      </div>
+    </div>
   );
 }
-
-// --- Styled Components ---
-const Overlay = styled.div<{ themeColor: string }>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  background-color: rgba(${(props) => props.themeColor}, 0.95);
-  backdrop-filter: blur(12px);
-  transition: all 0.3s ease-in-out;
-
-  box-sizing: border-box;
-
-  margin: 0 auto;
-  width: 100%;
-  max-width: 390px;
-
-  padding-bottom: 40vh;
-`;
-
-const AlertContainer = styled.div<{ animationRule: string }>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-
-  color: white;
-  padding: 3rem;
-  animation: ${(props) => props.animationRule};
-  margin-top: 40vh;
-`;
-
-const Title = styled.h1`
-  font-size: 3rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  margin-bottom: -1rem;
-  text-transform: uppercase;
-  animation: ${textBlink} 0.8s ease-in-out infinite;
-`;
-
-const SubText = styled.p`
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-`;
-
-const InfoText = styled.div`
-  font-size: 1.7rem;
-  font-weight: 500;
-  margin-bottom: 1.5rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1.7rem 0rem;
-  width: 100%;
-  border-radius: 9999px;
-`;
-
-const CloseButton = styled.button<{ themeColor: string }>`
-  padding: 1.6rem 0rem;
-  background-color: white;
-  color: rgb(${(props) => props.themeColor});
-  font-size: 1.8rem;
-  font-weight: 800;
-  width: 100%;
-  border-radius: 9999px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-  &:active {
-    transform: scale(0.95);
-  }
-`;
-
-const IconWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 10rem;
-
-  /* 💡 핵심: 조건부 스타일 제거, 모든 상황 공통 적용 */
-  width: 15rem; /* 원의 너비 */
-  height: 15rem; /* 원의 높이 */
-  background-color: rgba(255, 255, 255, 0.8); /* 반투명 흰색 원 */
-  border-radius: 50%; /* 원형 만들기 */
-
-  /* 아이콘 자체 크기 (img 태그) */
-  img {
-    width: 12rem;
-    height: 12rem;
-  }
-`;

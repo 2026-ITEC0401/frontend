@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import UrgentImg from "../assets/Urgent_icon.svg";
 import GeneralImg from "../assets/General_icon.svg";
 import { type CommonData } from "../types/alert";
@@ -16,56 +15,30 @@ export default function AlertCard({
   const isUrgent = type === "Urgent";
 
   return (
-    <Container isUrgent={isUrgent}>
-      <IconWrapper isUrgent={isUrgent}>
-        <Icon src={isUrgent ? UrgentImg : GeneralImg}></Icon>
-      </IconWrapper>
-      <TextWrapper>
-        <InfoText>{sound} 감지</InfoText>
+    <div
+      className={`flex items-center gap-5 rounded-[30px] p-5 my-2 shadow-[0_2px_4px_rgba(0,0,0,0.2)] transition-all duration-200 ease-in-out ${
+        isUrgent ? "bg-[#C23030] text-white" : "bg-white text-black"
+      }`}
+    >
+      <div
+        className={`flex items-center justify-center rounded-[15px] p-2 ${
+          isUrgent ? "bg-[#941A1A]" : "bg-[#F1F1F1]"
+        }`}
+      >
+        <img
+          src={isUrgent ? UrgentImg : GeneralImg}
+          className="w-[45px] object-contain"
+        ></img>
+      </div>
+      <div className="text-xl leading-[1.3] font-semibold">
+        <span className="text-2xl">{sound} 감지</span>
         <br />
-        <TimeText isUrgent={isUrgent}>
+        <span
+          className={isUrgent ? "text-[rgba(255,255,255,0.7)]" : "text-[#6b6b6b]"}
+        >
           {time} {location}
-        </TimeText>
-      </TextWrapper>
-    </Container>
+        </span>
+      </div>
+    </div>
   );
 }
-
-const Container = styled.div<{ isUrgent: boolean }>`
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  margin: 8px 0;
-  border-radius: 30px;
-  transition: all 0.2s ease-in-out;
-  gap: 20px;
-  color: ${({ isUrgent }) => (isUrgent ? "#ffffff" : "#000000")};
-  background-color: ${({ isUrgent }) => (isUrgent ? "#C23030" : "#ffffff")};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-`;
-const IconWrapper = styled.div<{ isUrgent: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ isUrgent }) => (isUrgent ? "#941A1A" : "#F1F1F1")};
-  border-radius: 15px;
-  padding: 8px;
-`;
-
-const Icon = styled.img`
-  width: 45px;
-  object-fit: contain;
-`;
-const TextWrapper = styled.div`
-  font-size: 20px;
-  font-weight: 600;
-
-  line-height: 1.3;
-`;
-
-const TimeText = styled.span<{ isUrgent: boolean }>`
-  color: ${({ isUrgent }) => (isUrgent ? "rgba(255,255,255,0.7)" : "#6b6b6b")};
-`;
-const InfoText = styled.span`
-  font-size: 24px;
-`;

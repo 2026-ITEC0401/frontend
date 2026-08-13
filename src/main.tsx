@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
-import GlobalStyle from "./styles/global.jsx";
+import "./styles/global.css";
 
 const rootElement = document.getElementById("root");
 
@@ -11,7 +11,6 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <GlobalStyle />
     <App />
   </StrictMode>,
 );

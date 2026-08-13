@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import userImg from "@/assets/user.svg";
 import alertImg from "@/assets/alert-main.svg";
 
@@ -8,53 +7,19 @@ interface TopHeaderProps {
 
 export default function TopHeader({ userName }: TopHeaderProps) {
   return (
-    <Container>
-      <Info>
-        <Profile src={userImg}></Profile>
-        <Text>
+    <header className="flex items-center justify-between px-2">
+      <div className="flex flex-row items-center justify-center gap-3">
+        <img
+          src={userImg}
+          className="h-[50px] w-[50px] cursor-pointer rounded-full"
+        ></img>
+        <p className="m-0 p-0 text-sm leading-[1.35] font-light text-white">
           안녕하세요
           <br />
-          <span>{userName}</span>님
-        </Text>
-      </Info>
-      <Alert src={alertImg}></Alert>
-    </Container>
+          <span className="font-semibold">{userName}</span>님
+        </p>
+      </div>
+      <img src={alertImg} className="cursor-pointer"></img>
+    </header>
   );
 }
-
-const Container = styled.header`
-  display: flex;
-  justify-content: space-between;
-  padding: 0 8px;
-  align-items: center;
-`;
-
-const Profile = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
-  cursor: pointer;
-`;
-
-const Text = styled.p`
-  margin: 0;
-  padding: 0;
-  line-height: 1.35;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 300;
-
-  span {
-    font-weight: 600;
-  }
-`;
-const Alert = styled.img`
-  cursor: pointer;
-`;
-const Info = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  justify-content: center;
-  align-items: center;
-`;

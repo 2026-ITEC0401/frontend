@@ -1,69 +1,29 @@
-import styled from "@emotion/styled";
 import { FiBell, FiHome, FiSettings } from "react-icons/fi";
+
+const navItemClass =
+  "flex flex-1 flex-col items-center justify-center gap-1.5 cursor-pointer text-[#374151] transition-colors duration-200 hover:text-[#111827] active:text-[#111827]";
 
 export default function Footer() {
   return (
-    <FooterContainer>
-      <NavItem>
+    <div
+      // 아이폰 하단 홈 바(Home Indicator) 영역을 침범하지 않도록 여백 확보
+      // 알림 카드들이 스크롤될 때 Footer 위로 올라오지 않게 제일 위로 띄움
+      className="fixed inset-x-0 bottom-0 z-[100] mx-auto flex h-[85px] w-full max-w-[390px] items-center justify-around border-t border-[#e5e7eb] bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]"
+    >
+      <div className={navItemClass}>
         <FiBell size={28} />
-        <IconLabel>알람</IconLabel>
-      </NavItem>
+        <span className="text-sm font-bold">알람</span>
+      </div>
 
-      <NavItem>
+      <div className={navItemClass}>
         <FiHome size={28} />
-        <IconLabel>홈</IconLabel>
-      </NavItem>
+        <span className="text-sm font-bold">홈</span>
+      </div>
 
-      <NavItem>
+      <div className={navItemClass}>
         <FiSettings size={28} />
-        <IconLabel>설정</IconLabel>
-      </NavItem>
-    </FooterContainer>
+        <span className="text-sm font-bold">설정</span>
+      </div>
+    </div>
   );
 }
-
-const FooterContainer = styled.div`
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  width: 100%;
-  margin: 0 auto;
-  height: 85px; // footer 높이
-  background-color: #ffffff;
-
-  max-width: 390px;
-
-  border-top: 1px solid #e5e7eb;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
-
-  display: flex;
-  justify-content: space-around; //버튼 간격
-  align-items: center;
-
-  /* 아이폰 하단 홈 바(Home Indicator) 영역을 침범하지 않도록 여백 확보 */
-  padding-bottom: env(safe-area-inset-bottom);
-  z-index: 100; /* 알림 카드들이 스크롤될 때 Footer 위로 올라오지 않게 제일 위로 띄움 */
-`;
-
-const NavItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  cursor: pointer;
-  color: #374151;
-  flex: 1;
-
-  transition: color 0.2s;
-  &:hover,
-  &:active {
-    color: #111827;
-  }
-`;
-
-const IconLabel = styled.span`
-  font-size: 14px;
-  font-weight: 700;
-`;
