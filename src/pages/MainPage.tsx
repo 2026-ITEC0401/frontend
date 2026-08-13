@@ -98,7 +98,7 @@ export default function MainPage() {
 
           let displayTime = "시간 오류";
           if (serverData.time) {
-            let dateObj;
+            let dateObj: undefined | Date;
 
             if (typeof serverData.time !== "number") {
               dateObj = serverData.time.toDate();
