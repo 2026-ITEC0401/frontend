@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import { type ReactNode } from "react";
 
 interface AppLayoutProps {
@@ -7,15 +6,9 @@ interface AppLayoutProps {
 
 // children : 페이지들
 export default function AppLayout({ children }: AppLayoutProps) {
-  return <MobileContainer>{children}</MobileContainer>;
+  return (
+    <div className="relative mx-auto w-full max-w-[390px] min-h-[100vh] overflow-auto bg-[#c0c0c0]">
+      {children}
+    </div>
+  );
 }
-
-const MobileContainer = styled.div`
-  width: 100%;
-  max-width: 390px;
-  min-height: 100vh;
-  margin: 0 auto;
-  background-color: #c0c0c0;
-  position: relative;
-  overflow: auto;
-`;
