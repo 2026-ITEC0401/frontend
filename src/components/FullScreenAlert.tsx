@@ -91,15 +91,12 @@ export default function FullScreenAlert({
       className="fixed inset-0 z-[9999] box-border mx-auto flex w-full max-w-[390px] flex-col items-center justify-center pb-[40vh] backdrop-blur-md transition-all duration-300 ease-in-out"
       style={{ backgroundColor: `rgba(${config.color}, 0.95)` }}
     >
-      <div
-        className="mt-[40vh] flex flex-col items-center p-12 text-center text-white"
-        style={{ animation: config.animation }}
-      >
-        <div className="flex h-[15rem] w-[15rem] items-center justify-center rounded-full bg-[rgba(255,255,255,0.8)] text-[10rem]">
+      <div className="mt-[40vh] flex flex-col items-center p-12 text-center text-white">
+        <div className="mb-4 flex h-[15rem] w-[15rem] items-center justify-center rounded-full bg-[rgba(255,255,255,0.8)] text-[10rem]">
           {config.icon}
         </div>
 
-        <h1 className="animate-text-blink -mb-4 text-5xl font-extrabold tracking-wider uppercase">
+        <h1 className="animate-text-blink mb-2 text-5xl font-extrabold tracking-wider uppercase">
           {config.title}
         </h1>
         <p className="mb-6 text-[2rem] font-bold">{sound} </p>
