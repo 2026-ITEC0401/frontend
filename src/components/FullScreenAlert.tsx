@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import FireImg from "../assets/fire.svg";
-import RockImg from "../assets/rock.png";
-import NoiseImg from "../assets/noise.png";
-import { type AlertWebData } from "../types/alert";
+import FireImg from "@/assets/fire.svg";
+import RockImg from "@/assets/rock.png";
+import NoiseImg from "@/assets/noise.png";
+import { type AlertWebData } from "@/types/alert";
 
 interface FullScreenAlertProps {
   alertData?: AlertWebData;

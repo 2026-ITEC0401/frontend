@@ -1,6 +1,6 @@
-import UrgentImg from "../assets/Urgent_icon.svg";
-import GeneralImg from "../assets/General_icon.svg";
-import { type CommonData } from "../types/alert";
+import UrgentImg from "@/assets/Urgent_icon.svg";
+import GeneralImg from "@/assets/General_icon.svg";
+import { type CommonData } from "@/types/alert";
 
 interface AlertCardProps extends CommonData {
   time: string;
@@ -34,7 +34,9 @@ export default function AlertCard({
         <span className="text-2xl">{sound} 감지</span>
         <br />
         <span
-          className={isUrgent ? "text-[rgba(255,255,255,0.7)]" : "text-[#6b6b6b]"}
+          className={
+            isUrgent ? "text-[rgba(255,255,255,0.7)]" : "text-[#6b6b6b]"
+          }
         >
           {time} {location}
         </span>

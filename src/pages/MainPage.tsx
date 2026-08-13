@@ -1,4 +1,4 @@
-import { db } from "../firebase";
+import { db } from "@/firebase";
 import {
   collection,
   onSnapshot,
@@ -8,14 +8,14 @@ import {
 } from "firebase/firestore";
 
 import { useState, useEffect } from "react";
-import TopHeader from "../components/TopHeader";
-import AlertCard from "../components/AlertCard";
-import Notification from "../components/Notification";
-import Room from "../components/Room";
-import Footer from "../components/Footer";
-import FullScreenAlert from "../components/FullScreenAlert";
-import { type RoomDevice } from "../types/room";
-import { type AlertWebData, type AlertServerData } from "../types/alert";
+import TopHeader from "@/components/TopHeader";
+import AlertCard from "@/components/AlertCard";
+import Notification from "@/components/Notification";
+import Room from "@/components/Room";
+import Footer from "@/components/Footer";
+import FullScreenAlert from "@/components/FullScreenAlert";
+import { type RoomDevice } from "@/types/room";
+import { type AlertWebData, type AlertServerData } from "@/types/alert";
 
 // true : 목업 데이터 사용 false : Firebase 서버 연결
 const IS_MOCK_MODE = false;

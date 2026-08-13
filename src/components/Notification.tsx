@@ -11,7 +11,8 @@ export default function Notification({ unreadCount }: NotificationProps) {
         <p className="m-0 leading-[1.4]">
           확인하지 않은
           <br />
-          <span className="font-semibold">{unreadCount}개의 알람</span>이 있어요!
+          <span className="font-semibold">{unreadCount}개의 알람</span>이
+          있어요!
         </p>
       </div>
       {/* 종 이미지가 카드를 뚫고 나가지 않도록 크기를 딱 잡아줍니다. */}
