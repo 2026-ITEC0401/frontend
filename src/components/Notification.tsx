@@ -1,4 +1,4 @@
-import bellImg from "@/assets/bell.svg";
+import bellImg from "@/assets/icon-alert-on.png";
 
 interface NotificationProps {
   unreadCount: number;

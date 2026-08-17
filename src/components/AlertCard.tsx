@@ -1,4 +1,4 @@
-import UrgentImg from "@/assets/Urgent_icon.svg";
+import UrgentImg from "@/assets/icon-urgent.png";
 import GeneralImg from "@/assets/General_icon.svg";
 import { type CommonData } from "@/types/alert";
 
