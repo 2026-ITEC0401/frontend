@@ -12,7 +12,7 @@ import TopHeader from "@/components/TopHeader";
 import AlertCard from "@/components/AlertCard";
 import Notification from "@/components/Notification";
 import Room from "@/components/Room";
-import Footer from "@/components/Footer";
+import Footer from "@/components/BottomNav";
 import FullScreenAlert from "@/components/FullScreenAlert";
 import { type RoomDevice } from "@/types/room";
 import { type AlertWebData, type AlertServerData } from "@/types/alert";
