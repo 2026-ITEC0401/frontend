@@ -1,7 +1,7 @@
-import livingRoom from "@/assets/living.svg";
-import bedRoom from "@/assets/bed.svg";
-import bathRoom from "@/assets/wash.png";
-import frontDoor from "@/assets/door.svg";
+import livingRoom from "@/assets/room-living.png";
+import bedRoom from "@/assets/room-bed.png";
+import bathRoom from "@/assets/room-bath.png";
+import frontDoor from "@/assets/room-entrance.png";
 import { type RoomLabel } from "@/types/room";
 
 interface RoomProps {
