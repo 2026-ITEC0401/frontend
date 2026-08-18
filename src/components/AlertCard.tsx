@@ -1,7 +1,5 @@
-import UrgentImg from "@/assets/icon-urgent.png";
-import GeneralImg from "@/assets/General_icon.svg";
 import { type CommonData } from "@/types/alert";
-
+import { ALERT_CONFIG } from "@/constants/alert";
 interface AlertCardProps extends CommonData {
   time: string;
 }
@@ -12,32 +10,27 @@ export default function AlertCard({
   sound,
   type,
 }: AlertCardProps) {
-  const isUrgent = type === "Urgent";
+  const config = ALERT_CONFIG[type];
 
   return (
     <div
-      className={`flex items-center gap-5 rounded-[30px] p-5 my-2 shadow-[0_2px_4px_rgba(0,0,0,0.2)] transition-all duration-200 ease-in-out ${
-        isUrgent ? "bg-[#C23030] text-white" : "bg-white text-black"
-      }`}
+      className={`flex items-center gap-5 rounded-3xl p-5 my-2 shadow-[0_2px_4px_rgba(0,0,0,0.2)] transition-all duration-200 ease-in-out ${config.cardBg}`}
     >
       <div
-        className={`flex items-center justify-center rounded-[15px] p-2 ${
-          isUrgent ? "bg-[#941A1A]" : "bg-[#F1F1F1]"
-        }`}
+        className={`flex items-center justify-center rounded-[20px] p-2 ${config.iconBg}`}
       >
         <img
-          src={isUrgent ? UrgentImg : GeneralImg}
-          className="w-[45px] object-contain"
-        ></img>
+          src={config.icon}
+          className="w-12 object-contain"
+          alt={`${sound} 아이콘`}
+        />
       </div>
-      <div className="text-xl leading-[1.3] font-semibold">
-        <span className="text-2xl">{sound} 감지</span>
+      <div>
+        <span className={`text-head-03 ${config.titleColor}`}>
+          {sound} 감지
+        </span>
         <br />
-        <span
-          className={
-            isUrgent ? "text-[rgba(255,255,255,0.7)]" : "text-[#6b6b6b]"
-          }
-        >
+        <span className={`text-body-01 ${config.subtitleColor}`}>
           {time} {location}
         </span>
       </div>
