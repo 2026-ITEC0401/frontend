@@ -92,19 +92,17 @@ export default function MainPage() {
   }, []);
 
   return (
-    <div className="flex min-h-[100vh] flex-col bg-[#41444b]">
-      <div className="flex flex-col gap-5 bg-[#41444b] px-5 py-4">
+    <div className="flex min-h-screen flex-col bg-gray-500">
+      <div className="flex flex-col gap-5 bg-gray-500 px-5 py-4">
         <Notification unreadCount={mockUnreadCount} />
       </div>
-      <div className="min-h-[calc(100vh-250px)] flex-1 rounded-t-[32px] bg-[#f8f8f8] pt-5 pb-[100px]">
+      <div className="min-h-[calc(100vh-250px)] flex-1 rounded-t-4xl bg-gray-100 pt-5 pb-25">
         <div className="px-5 py-7">
           <div>
-            <p className="m-0 text-[28px] font-bold text-[#41444b]">
-              기기 연결 상태
-            </p>
+            <p className="m-0 text-head-01 text-gray-500">기기 연결 상태</p>
           </div>
 
-          <div className="mt-5 grid grid-cols-2 gap-4">
+          <div className="mt-5 grid grid-cols-2 gap-2">
             {mockDeviceData.map((device, index) => (
               <Room
                 key={index}
@@ -116,9 +114,7 @@ export default function MainPage() {
         </div>
         <div className="px-5 py-2.5">
           <div>
-            <p className="m-0 text-[28px] font-bold text-[#41444b]">
-              실시간 소리 알림
-            </p>
+            <p className="m-0 text-head-01 text-gray-500">실시간 소리 알림</p>
           </div>
 
           <div className="mt-4 flex flex-col">
