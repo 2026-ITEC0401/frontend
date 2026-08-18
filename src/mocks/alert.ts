@@ -1,6 +1,6 @@
 import { type AlertWebData } from "@/types/alert";
 
-export const mockUnreadCount = 3;
+export const mockUnreadCount = 4;
 
 export const mockAlertData: AlertWebData[] = [
   {

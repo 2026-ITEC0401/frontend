@@ -7,7 +7,7 @@ interface AppLayoutProps {
 // children : 페이지들
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div className="relative mx-auto w-full max-w-[390px] min-h-[100vh] overflow-auto bg-[#c0c0c0]">
+    <div className="relative mx-auto w-full max-w-97.5 min-h-screen overflow-auto bg-[#c0c0c0]">
       {children}
       <BottomNav />
     </div>
