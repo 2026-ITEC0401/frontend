@@ -39,6 +39,11 @@
 
   /* ===== Typography ===== */
 
+  /* Alert */
+  --text-alert-01: 50px;
+  --text-alert-01--font-weight: 800;
+  --text-alert-01--line-height: 1.2;
+
   /* Head */
   --text-head-01: 32px;
   --text-head-01--font-weight: 700;
