@@ -99,14 +99,15 @@ export default function MainPage() {
       <div className="min-h-[calc(100vh-250px)] flex-1 rounded-t-4xl bg-gray-100 pt-5 pb-25">
         <div className="px-5 py-7">
           <div>
-            <p className="m-0 text-head-01 text-gray-500">기기 연결 상태</p>
+            <p className="m-0 text-head-02 text-gray-500">기기 연결 상태</p>
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-2">
-            {mockDeviceData.map((device, index) => (
+            {mockDeviceData.map((device) => (
               <Room
-                key={index}
-                name={device.name}
+                key={device.id}
+                id={device.id}
+                location={device.location}
                 isConnected={device.isConnected}
               />
             ))}

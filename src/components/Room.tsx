@@ -1,28 +1,25 @@
-import livingRoom from "@/assets/room-living.png";
-import bedRoom from "@/assets/room-bed.png";
-import bathRoom from "@/assets/room-bath.png";
-import frontDoor from "@/assets/room-entrance.png";
-import { type RoomLabel } from "@/types/room";
+import { useNavigate } from "react-router-dom";
+import { roomImages } from "@/constants/room";
+import { type DeviceId, type RoomLabel } from "@/types/room";
 
 interface RoomProps {
-  name: RoomLabel;
+  id: DeviceId;
+  location: RoomLabel;
   isConnected: boolean;
 }
 
-const roomImages: Record<RoomLabel, string> = {
-  거실: livingRoom,
-  안방: bedRoom,
-  화장실: bathRoom,
-  현관: frontDoor,
-};
+export default function Room({ id, location, isConnected }: RoomProps) {
+  const navigate = useNavigate();
 
-export default function Room({ name, isConnected }: RoomProps) {
   return (
-    <div className="flex cursor-pointer flex-col gap-2 rounded-4xl bg-white p-4 shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
+    <div
+      onClick={() => navigate(`/settings/device/${id}`)}
+      className="flex cursor-pointer flex-col gap-2 rounded-4xl bg-white p-4 shadow-02"
+    >
       <div className="flex h-25 w-full items-center justify-center">
         <img
-          src={roomImages[name]}
-          alt={`${name} 아이콘`}
+          src={roomImages[location]}
+          alt={`${location} 아이콘`}
           className="max-h-full object-contain"
         />
       </div>
@@ -33,7 +30,7 @@ export default function Room({ name, isConnected }: RoomProps) {
               isConnected ? "bg-success" : "bg-gray-200"
             }`}
           />
-          <p className="m-0 text-head-03 text-black">{name}</p>
+          <p className="m-0 text-subtitle-01 text-black">{location}</p>
         </div>
       </div>
     </div>
