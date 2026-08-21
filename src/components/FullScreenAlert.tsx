@@ -71,7 +71,7 @@ export default function FullScreenAlert({
 
   return (
     <div
-      className={`fixed inset-0 z-9999 box-border mx-auto flex w-full max-w-97.5 flex-col items-center justify-center pb-[40vh] backdrop-blur-md transition-all duration-300 ease-in-out ${config.bgColor}`}
+      className={`fixed inset-0 z-9999 box-border mx-auto flex w-full max-w-97.5 flex-col items-center justify-center pb-[40vh] transition-all duration-300 ease-in-out ${config.bgColor}`}
     >
       <div className="mt-[40vh] flex flex-col items-center p-12 text-center text-white">
         <div

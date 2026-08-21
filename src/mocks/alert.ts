@@ -29,6 +29,6 @@ export const mockAlertData: AlertWebData[] = [
     time: "오후 03:02",
     location: "현관",
     sound: "방문",
-    type: "Visitor", // 노랑 (생활 기기)
+    type: "Visitor", // 파랑 (방문자)
   },
 ];
