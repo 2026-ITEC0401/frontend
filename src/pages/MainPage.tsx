@@ -76,6 +76,7 @@ export default function MainPage() {
             time: displayTime,
             location: serverData.location,
             sound: serverData.sound,
+            raw_label: serverData.raw_label,
             type: serverData.type,
           };
 
