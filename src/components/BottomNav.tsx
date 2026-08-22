@@ -19,7 +19,9 @@ export default function BottomNav() {
     <div className="fixed inset-x-0 bottom-0 z-100 mx-auto flex h-20 w-full max-w-97.5 items-center justify-around  bg-white pb-[env(safe-area-inset-bottom)]">
       <NavLink to="/alerts" className={navItemClass}>
         <Bell size={28} className={isAlertsActive ? activeIconClass : ""} />
-        <span className={isAlertsActive ? activeLabelClass : inactiveLabelClass}>
+        <span
+          className={isAlertsActive ? activeLabelClass : inactiveLabelClass}
+        >
           알람
         </span>
       </NavLink>
@@ -32,7 +34,10 @@ export default function BottomNav() {
       </NavLink>
 
       <NavLink to="/settings" className={navItemClass}>
-        <Settings size={28} className={isSettingsActive ? activeIconClass : ""} />
+        <Settings
+          size={28}
+          className={isSettingsActive ? activeIconClass : ""}
+        />
         <span
           className={isSettingsActive ? activeLabelClass : inactiveLabelClass}
         >
