@@ -1,4 +1,4 @@
-import bellImg from "@/assets/icon-alert-on.png";
+import iconAlert from "@/assets/icon-alert-on.png";
 
 interface NotificationProps {
   unreadCount: number;
@@ -17,9 +17,9 @@ export default function Notification({ unreadCount }: NotificationProps) {
       </div>
       {/* 종 이미지가 카드를 뚫고 나가지 않도록 크기를 딱 잡아줍니다. */}
       <img
-        src={bellImg}
+        src={iconAlert}
         alt="알람 아이콘"
-        className="h-auto w-[70px] object-contain"
+        className="h-auto w-17.5 object-contain"
       />
     </div>
   );

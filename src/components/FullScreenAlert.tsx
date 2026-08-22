@@ -9,62 +9,45 @@ interface FullScreenAlertProps {
   onClose: () => void;
 }
 
-// --- Animations & Config ---  연동확인
-// pulse / slideDown / textBlink keyframes는 src/styles/global.css에 정의되어 있습니다.
-
-const ALERT_CONFIG = {
+const ALERT_POPUP_CONFIG = {
   Urgent: {
-    color: "239, 68, 68", // 빨강
-    title: "긴급 상황 감지",
-    icon: (
-      <img
-        src={FireImg}
-        alt="긴급 화재 아이콘"
-        style={{ width: "12rem", height: "12rem" }}
-      />
-    ),
-    animation: "pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-    vibratePattern: [500, 200, 500, 200, 500], // 강한 진동 반복
+    bgColor: "bg-red-200",
+    iconBgColor: "bg-red-100",
+    infoBgColor: "bg-red-300",
+    textColor: "text-red-200",
+    title: "화재 경보기 울림",
+    icon: <img src={FireImg} alt="긴급 화재 아이콘" className="size-48" />,
+    vibratePattern: [500, 200, 500, 200, 500],
   },
   Visitor: {
-    color: "59, 130, 246", // 파랑
-    title: "방문 감지",
-    icon: (
-      <img
-        src={RockImg}
-        alt="잠금 아이콘"
-        style={{ width: "12rem", height: "12rem" }}
-      />
-    ),
-    animation: "pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-    vibratePattern: [200, 100, 200], // 짧게 두 번
+    bgColor: "bg-blue-200",
+    iconBgColor: "bg-blue-100",
+    infoBgColor: "bg-blue-300",
+    textColor: "text-blue-200",
+    title: "도어락 열림",
+    icon: <img src={RockImg} alt="방문 감지" className="size-48" />,
+    vibratePattern: [200, 100, 200],
   },
 
   Noise: {
-    color: "242, 181, 11", // 노랑
-    title: "주변 소음 감지",
-    icon: (
-      <img
-        src={NoiseImg}
-        alt="소음 아이콘"
-        style={{ width: "12rem", height: "12rem" }}
-      />
-    ),
-    animation: "slideDown 0.5s ease-out",
-    vibratePattern: [300], // 짧게 한 번
+    bgColor: "bg-yellow-200",
+    iconBgColor: "bg-yellow-100",
+    infoBgColor: "bg-yellow-300",
+    textColor: "text-yellow-200",
+    title: "아기 울음 소리",
+    icon: <img src={NoiseImg} alt="소음 아이콘" className="size-48" />,
+    vibratePattern: [300],
   },
 };
 
-// --- Main Component ---
 export default function FullScreenAlert({
   alertData,
   onClose,
 }: FullScreenAlertProps) {
-  // API 명세서에 맞춰 alertData의 type이 "Urgent" | "Visitor" | "Appliance" 로 온다고 가정합니다.
   const { type, sound, location, time } = alertData || {};
 
-  // type에 맞는 설정이 없으면 렌더링하지 않거나 기본값 처리 (안전 장치)
-  const config = type ? ALERT_CONFIG[type] : undefined;
+  // type에 맞는 설정이 없으면 렌더링하지 않거나 기본값 처리
+  const config = type ? ALERT_POPUP_CONFIG[type] : undefined;
 
   useEffect(() => {
     if (!config) return;
@@ -88,26 +71,28 @@ export default function FullScreenAlert({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] box-border mx-auto flex w-full max-w-[390px] flex-col items-center justify-center pb-[40vh] backdrop-blur-md transition-all duration-300 ease-in-out"
-      style={{ backgroundColor: `rgba(${config.color}, 0.95)` }}
+      className={`fixed inset-0 z-9999 box-border mx-auto flex w-full max-w-97.5 flex-col items-center justify-center pb-[40vh] transition-all duration-300 ease-in-out ${config.bgColor}`}
     >
       <div className="mt-[40vh] flex flex-col items-center p-12 text-center text-white">
-        <div className="mb-4 flex h-[15rem] w-[15rem] items-center justify-center rounded-full bg-[rgba(255,255,255,0.8)] text-[10rem]">
+        <div
+          className={`mb-4 flex h-60 w-60 items-center justify-center rounded-full  ${config.iconBgColor}`}
+        >
           {config.icon}
         </div>
 
-        <h1 className="animate-text-blink mb-2 text-5xl font-extrabold tracking-wider uppercase">
-          {config.title}
+        <h1 className="animate-text-blink mb-2 text-alert-01 tracking-wider">
+          {sound} 감지
         </h1>
-        <p className="mb-6 text-[2rem] font-bold">{sound} </p>
+        <p className="mb-6 text-head-01">{config.title} </p>
 
-        <div className="mb-6 w-full rounded-full bg-[rgba(0,0,0,0.2)] px-0 py-[1.7rem] text-[1.7rem] font-medium">
+        <div
+          className={`mb-6 w-full rounded-full px-7 py-[1.7rem] text-head-01 ${config.infoBgColor}`}
+        >
           {location} / {time}
         </div>
 
         <button
-          className="w-full cursor-pointer rounded-full border-none bg-white px-0 py-[1.6rem] text-[1.8rem] font-extrabold shadow-[0_10px_25px_rgba(0,0,0,0.1)] transition-transform duration-200 hover:scale-105 active:scale-95"
-          style={{ color: `rgb(${config.color})` }}
+          className={`w-full cursor-pointer rounded-full border-none bg-white px-0 py-[1.6rem] text-head-01 shadow-[0_10px_25px_rgba(0,0,0,0.1)] transition-transform duration-200 hover:scale-105 active:scale-95 ${config.textColor}`}
           onClick={onClose}
         >
           확인 및 닫기
