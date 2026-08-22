@@ -3,6 +3,10 @@ name: CI
 on:
   pull_request:
 
+# GITHUB_TOKEN 권한 최소화 (읽기만 필요)
+permissions:
+  contents: read
+
 # 같은 PR에 새 커밋을 푸시하면 이전 실행은 취소 (러너 낭비 방지)
 concurrency:
   group: ci-${{ github.ref }}
@@ -12,6 +16,7 @@ jobs:
   verify:
     name: typecheck / lint / format
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout
