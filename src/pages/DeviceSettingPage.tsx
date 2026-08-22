@@ -45,9 +45,7 @@ export default function DeviceSettingPage() {
             alt={`${settings.location} 아이콘`}
             className="h-24 w-24 object-contain"
           />
-          <p className="m-0 text-head-03 text-gray-600">
-            {settings.location}
-          </p>
+          <p className="m-0 text-head-03 text-gray-600">{settings.location}</p>
         </div>
       </div>
 
