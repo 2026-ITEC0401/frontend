@@ -1,19 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { roomImages } from "@/constants/room";
-import { type DeviceId, type RoomLabel } from "@/types/room";
+import {
+  type DeviceUiStatus,
+  type DeviceId,
+  type RoomLabel,
+} from "@/types/room";
 
 interface RoomProps {
-  id: DeviceId;
+  device_id: DeviceId;
   location: RoomLabel;
-  isConnected: boolean;
+  ui_status: DeviceUiStatus;
 }
 
-export default function Room({ id, location, isConnected }: RoomProps) {
+export default function Room({ device_id, location, ui_status }: RoomProps) {
   const navigate = useNavigate();
 
   return (
     <div
-      onClick={() => navigate(`/settings/device/${id}`)}
+      onClick={() => navigate(`/settings/device/${device_id}`)}
       className="flex cursor-pointer flex-col gap-2 rounded-4xl bg-white p-4 shadow-02"
     >
       <div className="flex h-25 w-full items-center justify-center">
@@ -27,7 +31,7 @@ export default function Room({ id, location, isConnected }: RoomProps) {
         <div className="relative flex items-center">
           <div
             className={`absolute right-full mr-2.5 h-3 w-3 rounded-full ${
-              isConnected ? "bg-success" : "bg-gray-200"
+              ui_status === "connected" ? "bg-success" : "bg-gray-200"
             }`}
           />
           <p className="m-0 text-subtitle-01 text-black">{location}</p>
