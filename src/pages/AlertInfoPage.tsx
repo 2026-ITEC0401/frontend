@@ -30,13 +30,13 @@ export default function AlertInfoPage() {
       <div className="flex flex-col items-center gap-3 py-8">
         <img
           src={config.icon}
-          alt={`${alert.sound} 아이콘`}
+          alt={`${config.badgeLabel} 알림 아이콘`}
           className="h-26 w-26 object-contain"
         />
         <span
           className={`flex items-center rounded-full px-5 h-8 text-subtitle-03 text-white ${config.badgeBg}`}
         >
-          {alert.sound}
+          {config.badgeLabel}
         </span>
       </div>
 
