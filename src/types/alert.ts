@@ -42,7 +42,9 @@ export interface AlertHistoryAlarm extends CommonData {
   // Asia/Seoul ISO 8601 - 화면 표시용
   local_time: string;
   source_device_id?: string;
-  raw_label?: string | null;
+  // CommonData에서 필수로 정의된 필드라 옵셔널로 넓힐 수 없다.
+  // 명세 §10.6 기준 이력 응답에는 항상 포함되며 값이 없으면 null로 온다.
+  raw_label: string | null;
   confidence?: number | null;
 }
 
