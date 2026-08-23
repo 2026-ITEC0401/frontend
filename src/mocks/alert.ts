@@ -4,32 +4,36 @@ export const mockUnreadCount = 4;
 
 export const mockAlertData: AlertWebData[] = [
   {
-    id: 1,
+    id: "alert-001",
     time: "오전 08:00",
     location: "현관",
     sound: "방문",
-    type: "Visitor", // 파랑 (방문자)
+    raw_label: "도어락_개방음",
+    type: "Visitor",
   },
   {
-    id: 2,
+    id: "alert-002",
     time: "오전 09:15",
     location: "거실",
     sound: "화재",
-    type: "Urgent", // 빨강 (긴급, 화재)
+    raw_label: "화재경보_경보음",
+    type: "Urgent",
   },
   {
-    id: 3,
+    id: "alert-003",
     time: "오후 02:22",
     location: "현관",
     sound: "소음",
-    type: "Noise", // 노랑 (생활 기기)
+    raw_label: "아기울음소리",
+    type: "Noise",
   },
   {
-    id: 4,
+    id: "alert-004",
     time: "오후 03:02",
     location: "현관",
     sound: "방문",
-    type: "Visitor", // 파랑 (방문자)
+    raw_label: "문_두드림",
+    type: "Visitor",
   },
 ];
 
