@@ -95,10 +95,10 @@ export default function MainPage() {
           <div className="mt-5 grid grid-cols-2 gap-2">
             {mockDeviceData.map((device) => (
               <Room
-                key={device.id}
-                id={device.id}
+                key={device.device_id}
+                device_id={device.device_id}
                 location={device.location}
-                isConnected={device.isConnected}
+                ui_status={device.ui_status}
               />
             ))}
           </div>
