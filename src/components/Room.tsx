@@ -30,7 +30,7 @@ export default function Room({ id, location, isConnected }: RoomProps) {
               isConnected ? "bg-success" : "bg-gray-200"
             }`}
           />
-          <p className="m-0 text-subtitle-01 text-black">{location}</p>
+          <p className="m-0 text-head-03 text-black">{location}</p>
         </div>
       </div>
     </div>

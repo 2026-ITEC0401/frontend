@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import FireImg from "@/assets/icon-urgent.png";
+import EmergencyImg from "@/assets/icon-emergency.png";
 import RockImg from "@/assets/icon-visitor.png";
 import NoiseImg from "@/assets/icon-noise.png";
 import { type AlertWebData } from "@/types/alert";
@@ -16,7 +16,7 @@ const ALERT_POPUP_CONFIG = {
     infoBgColor: "bg-red-300",
     textColor: "text-red-200",
     title: "화재 경보기 울림",
-    icon: <img src={FireImg} alt="긴급 화재 아이콘" className="size-48" />,
+    icon: <img src={EmergencyImg} alt="긴급 상황 아이콘" className="size-48" />,
     vibratePattern: [500, 200, 500, 200, 500],
   },
   Visitor: {
