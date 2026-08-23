@@ -12,7 +12,7 @@ import AlertCard from "@/components/AlertCard";
 import Notification from "@/components/Notification";
 import Room from "@/components/Room";
 import FullScreenAlert from "@/components/FullScreenAlert";
-import { type AlertWebData, type AlertServerData } from "@/types/alert";
+import { type AlertWebData, type AlertRealtime } from "@/types/alert";
 
 // 목업 데이터 - IS_MOCK_MODE 로 서버 연결/해제 가능
 import { mockDeviceData } from "@/mocks/room";
@@ -42,7 +42,7 @@ export default function MainPage() {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           // 파이어베이스에서 막 도착한 순수 원본 데이터
-          const serverData = change.doc.data() as AlertServerData;
+          const serverData = change.doc.data() as AlertRealtime;
 
           // 🚨 F12 관리자 모드 콘솔창에 데이터 찍기
           console.log("====================================");
@@ -51,32 +51,22 @@ export default function MainPage() {
 
           let displayTime = "시간 오류";
           if (serverData.time) {
-            let dateObj: undefined | Date;
-
-            if (typeof serverData.time !== "number") {
-              dateObj = serverData.time.toDate();
-            } else {
-              dateObj = new Date(
-                serverData.time.toString().length === 10
-                  ? serverData.time * 1000
-                  : serverData.time,
-              );
-            }
-
-            if (dateObj) {
-              displayTime = dateObj.toLocaleTimeString("ko-KR", {
+            displayTime = new Date(serverData.time).toLocaleTimeString(
+              "ko-KR",
+              {
                 hour: "2-digit",
                 minute: "2-digit",
-              });
-            }
+              },
+            );
           }
 
-          const finalAlertData = {
+          const finalAlertData: AlertWebData = {
             id: serverData.id || change.doc.id,
             time: displayTime,
             location: serverData.location,
             sound: serverData.sound,
             type: serverData.type,
+            raw_label: serverData.raw_label,
           };
 
           console.log("🛠️ [UI 변환 결과 프리뷰] :", finalAlertData);

@@ -1,7 +1,10 @@
-import { type CommonData } from "@/types/alert";
+import { type AlertType } from "@/types/alert";
 import { ALERT_CONFIG } from "@/constants/alert";
-interface AlertCardProps extends CommonData {
+interface AlertCardProps {
   time: string;
+  location: string;
+  sound: string;
+  type: AlertType;
 }
 
 export default function AlertCard({
