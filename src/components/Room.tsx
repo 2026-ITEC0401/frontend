@@ -34,7 +34,7 @@ export default function Room({ device_id, location, ui_status }: RoomProps) {
               ui_status === "connected" ? "bg-success" : "bg-gray-200"
             }`}
           />
-          <p className="m-0 text-subtitle-01 text-black">{location}</p>
+          <p className="m-0 text-head-03 text-black">{location}</p>
         </div>
       </div>
     </div>
