@@ -8,7 +8,7 @@ import { type RoomDevice } from "@/types/room";
 
 export default function DeviceSettingPage() {
   const { id } = useParams<{ id: string }>();
-  const device = mockDeviceData.find((d) => d.id === id);
+  const device = mockDeviceData.find((d) => d.device_id === id);
 
   // 설정 값 로컬 상태 (서버 연동 시 초기값/저장 로직 교체)
   const [settings, setSettings] = useState<RoomDevice | undefined>(device);
@@ -35,7 +35,7 @@ export default function DeviceSettingPage() {
       <div className="flex flex-col items-center py-12">
         <div
           className={`flex h-50 w-50 flex-col items-center justify-center gap-1 rounded-full bg-white shadow-01 ${
-            settings.isConnected
+            settings.ui_status === "connected"
               ? "border-8 border-success"
               : "border-8 border-gray-200"
           }`}
@@ -52,15 +52,20 @@ export default function DeviceSettingPage() {
       <div className="flex flex-col gap-4 px-5">
         <SettingRow label="기기 연결 상태">
           <Toggle
-            checked={settings.isConnected}
-            onChange={(v) => update({ isConnected: v })}
+            checked={settings.desired_mqtt_connected}
+            onChange={(v) =>
+              update({
+                desired_mqtt_connected: v,
+                ui_status: v ? "pending" : "disabled_by_owner",
+              })
+            }
           />
         </SettingRow>
 
         <SettingRow label="LED 알림">
           <Toggle
-            checked={settings.ledEnabled}
-            onChange={(v) => update({ ledEnabled: v })}
+            checked={settings.led_alert_enabled}
+            onChange={(v) => update({ led_alert_enabled: v })}
           />
         </SettingRow>
       </div>

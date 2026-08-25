@@ -30,12 +30,12 @@ export function toAlertTimeParts(alert: AlertWebData): AlertTimeParts {
   }
 
   // local_time이 없는 경우 카드용 표시 문자열("오전 08:47")로 대체
-  const [meridiem, clock] = alert.time.split(" ");
+  const [meridiem, clock] = alert.display_time.split(" ");
   const isoDate = alert.date ?? "";
   return {
     date: isoDate ? isoDate.replace(/-/g, "/") : "-",
     meridiem: clock ? meridiem : "시각",
-    clock: clock ?? alert.time,
-    stamp: `${isoDate} ${alert.time}`.trim(),
+    clock: clock ?? alert.display_time,
+    stamp: `${isoDate} ${alert.display_time}`.trim(),
   };
 }

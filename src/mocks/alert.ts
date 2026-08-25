@@ -5,48 +5,48 @@ export const mockUnreadCount = 4;
 // raw_label(세부 분류) → sound(사용자 표시) → type 매핑은 백엔드 매핑표를 따름
 export const mockAlertData: AlertWebData[] = [
   {
-    id: 1,
-    time: "오전 08:00",
+    id: "alert-001",
+    display_time: "오전 08:00",
     date: "2026-07-08",
     local_time: "2026-07-08T08:00:00+09:00",
     location: "현관",
     source_device_id: "esp32_2",
     sound: "도어락소리",
     raw_label: "도어락_개방음",
-    type: "Visitor", // 파랑 (방문자)
+    type: "Visitor",
   },
   {
-    id: 2,
-    time: "오전 08:47",
+    id: "alert-002",
+    display_time: "오전 08:47",
     date: "2026-07-08",
     local_time: "2026-07-08T08:47:00+09:00",
     location: "안방",
     source_device_id: "esp32_1",
     sound: "비상벨소리",
     raw_label: "사이렌_삐뽀삐뽀",
-    type: "Urgent", // 빨강 (긴급, 화재)
+    type: "Urgent",
   },
   {
-    id: 3,
-    time: "오후 02:22",
+    id: "alert-003",
+    display_time: "오후 02:22",
     date: "2026-07-08",
     local_time: "2026-07-08T14:22:00+09:00",
     location: "거실",
     source_device_id: "rpi-001",
     sound: "아기울음소리",
     raw_label: "아기 울음",
-    type: "Noise", // 노랑 (생활 기기)
+    type: "Noise",
   },
   {
-    id: 4,
-    time: "오후 03:02",
+    id: "alert-004",
+    display_time: "오후 03:02",
     date: "2026-07-08",
     local_time: "2026-07-08T15:02:00+09:00",
     location: "현관",
     source_device_id: "esp32_2",
     sound: "노크소리",
     raw_label: "노크_목재",
-    type: "Visitor", // 파랑 (방문자)
+    type: "Visitor",
   },
 ];
 
