@@ -53,7 +53,12 @@ export default function DeviceSettingPage() {
         <SettingRow label="기기 연결 상태">
           <Toggle
             checked={settings.desired_mqtt_connected}
-            onChange={(v) => update({ desired_mqtt_connected: v })}
+            onChange={(v) =>
+              update({
+                desired_mqtt_connected: v,
+                ui_status: v ? "pending" : "disabled_by_owner",
+              })
+            }
           />
         </SettingRow>
 
