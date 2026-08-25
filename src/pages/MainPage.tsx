@@ -62,7 +62,7 @@ export default function MainPage() {
 
           const finalAlertData: AlertWebData = {
             id: serverData.id || change.doc.id,
-            time: displayTime,
+            display_time: displayTime,
             location: serverData.location,
             sound: serverData.sound,
             raw_label: serverData.raw_label,
@@ -113,7 +113,7 @@ export default function MainPage() {
               <AlertCard
                 key={alert.id}
                 id={alert.id}
-                time={alert.time}
+                display_time={alert.display_time}
                 location={alert.location}
                 sound={alert.sound}
                 type={alert.type}

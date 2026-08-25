@@ -44,7 +44,7 @@ export default function FullScreenAlert({
   alertData,
   onClose,
 }: FullScreenAlertProps) {
-  const { type, sound, location, time } = alertData || {};
+  const { type, sound, location, display_time } = alertData || {};
 
   // type에 맞는 설정이 없으면 렌더링하지 않거나 기본값 처리
   const config = type ? ALERT_POPUP_CONFIG[type] : undefined;
@@ -88,7 +88,7 @@ export default function FullScreenAlert({
         <div
           className={`mb-6 w-full rounded-full px-7 py-[1.7rem] text-head-01 ${config.infoBgColor}`}
         >
-          {location} / {time}
+          {location} / {display_time}
         </div>
 
         <button

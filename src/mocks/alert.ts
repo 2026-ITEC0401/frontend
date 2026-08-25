@@ -6,7 +6,7 @@ export const mockUnreadCount = 4;
 export const mockAlertData: AlertWebData[] = [
   {
     id: "alert-001",
-    time: "오전 08:00",
+    display_time: "오전 08:00",
     date: "2026-07-08",
     local_time: "2026-07-08T08:00:00+09:00",
     location: "현관",
@@ -17,7 +17,7 @@ export const mockAlertData: AlertWebData[] = [
   },
   {
     id: "alert-002",
-    time: "오전 08:47",
+    display_time: "오전 08:47",
     date: "2026-07-08",
     local_time: "2026-07-08T08:47:00+09:00",
     location: "안방",
@@ -28,7 +28,7 @@ export const mockAlertData: AlertWebData[] = [
   },
   {
     id: "alert-003",
-    time: "오후 02:22",
+    display_time: "오후 02:22",
     date: "2026-07-08",
     local_time: "2026-07-08T14:22:00+09:00",
     location: "거실",
@@ -39,7 +39,7 @@ export const mockAlertData: AlertWebData[] = [
   },
   {
     id: "alert-004",
-    time: "오후 03:02",
+    display_time: "오후 03:02",
     date: "2026-07-08",
     local_time: "2026-07-08T15:02:00+09:00",
     location: "현관",

@@ -15,7 +15,7 @@ export interface CommonData {
 export interface AlertWebData extends CommonData {
   id: string;
   // 카드에 바로 찍는 표시용 시각 ("오전 08:00")
-  time: string;
+  display_time: string;
   // 명세 §7.4 date (Asia/Seoul 기준 YYYY-MM-DD)
   date?: string;
   // 명세 §7.4 local_time (Asia/Seoul 오프셋 포함 ISO). 오전·오후와 시각의 출처

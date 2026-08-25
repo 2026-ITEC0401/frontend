@@ -4,12 +4,12 @@ import { ALERT_CONFIG } from "@/constants/alert";
 
 type AlertCardProps = Pick<
   AlertWebData,
-  "id" | "time" | "location" | "sound" | "type"
+  "id" | "display_time" | "location" | "sound" | "type"
 >;
 
 export default function AlertCard({
   id,
-  time,
+  display_time,
   location,
   sound,
   type,
@@ -37,7 +37,7 @@ export default function AlertCard({
         </span>
         <br />
         <span className={`text-body-01 ${config.subtitleColor}`}>
-          {time} {location}
+          {display_time} {location}
         </span>
       </div>
     </div>
