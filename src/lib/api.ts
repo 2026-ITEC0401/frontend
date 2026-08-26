@@ -1,4 +1,9 @@
-import { getAccessToken } from "@/lib/auth";
+import {
+  getAccessToken,
+  getRefreshToken,
+  setTokens,
+  clearAuth,
+} from "@/lib/auth";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -28,13 +33,33 @@ export class ApiError extends Error {
 interface RequestOptions extends Omit<RequestInit, "body"> {
   body?: unknown;
   auth?: boolean;
+  isRetry?: boolean;
 }
 
+async function refreshTokens(): Promise<boolean> {
+  const refreshToken = getRefreshToken();
+  if (!refreshToken) return false;
+
+  try {
+    const res = await fetch(`${BASE_URL}/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+    if (!res.ok) return false;
+
+    const tokens = await res.json();
+    setTokens(tokens.access_token, tokens.refresh_token);
+    return true;
+  } catch {
+    return false;
+  }
+}
 export async function request<T>(
   path: string,
   options: RequestOptions = {},
 ): Promise<T> {
-  const { body, auth = true, headers, ...rest } = options;
+  const { body, auth = true, isRetry, headers, ...rest } = options;
   const finalHeaders: Record<string, string> = {
     ...(headers as Record<string, string>),
   };
@@ -61,6 +86,19 @@ export async function request<T>(
     throw new ApiError(0, {
       code: "NETWORK_ERROR",
       message: "인터넷 연결을 확인해 주세요.",
+    });
+  }
+
+  if (res.status === 401 && auth && !isRetry) {
+    const renewed = await refreshTokens();
+    if (renewed) {
+      return request<T>(path, { ...options, isRetry: true });
+    }
+    clearAuth();
+    window.location.href = "/login";
+    throw new ApiError(401, {
+      code: "UNAUTHORIZED",
+      message: "다시 로그인해 주세요.",
     });
   }
 
