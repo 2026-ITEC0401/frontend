@@ -3,6 +3,9 @@ import { type EmergencyAddress, type HouseholdMember } from "@/types/household";
 // 현재 로그인한 사용자. "user-member-1"로 바꾸면 보호자 화면을 확인할 수 있다.
 export const MOCK_MY_USER_ID = "user-owner";
 
+// 명세 §5.2 초대 코드 (owner 전용, 6자리 영문 대문자·숫자)
+export const mockInviteCode = "A7K2M9";
+
 export const mockEmergencyAddress: EmergencyAddress = {
   postal_code: "41566",
   road_address: "대구광역시 북구 대학로 80",

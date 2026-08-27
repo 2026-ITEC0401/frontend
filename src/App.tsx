@@ -5,6 +5,7 @@ import AlertsPage from "@/pages/AlertsPage";
 import AlertInfoPage from "@/pages/AlertInfoPage";
 import DeviceSettingPage from "@/pages/DeviceSettingPage";
 import DeviceListPage from "@/pages/DeviceListPage";
+import FamilySettingsPage from "@/pages/FamilySettingsPage";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 import LoginPage from "@/pages/LoginPage";
 import AppLayout from "@/components/AppLayout";
@@ -30,10 +31,7 @@ function App() {
               path="/settings/device/:id"
               element={<DeviceSettingPage />}
             />
-            <Route
-              path="/settings/family"
-              element={<ComingSoonPage title="가족 설정" />}
-            />
+            <Route path="/settings/family" element={<FamilySettingsPage />} />
             <Route
               path="/settings/notifications"
               element={<ComingSoonPage title="알림 설정" />}
