@@ -4,6 +4,7 @@ import SettingsPage from "@/pages/SettingsPage";
 import AlertsPage from "@/pages/AlertsPage";
 import AlertInfoPage from "@/pages/AlertInfoPage";
 import DeviceSettingPage from "@/pages/DeviceSettingPage";
+import DeviceListPage from "@/pages/DeviceListPage";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 import LoginPage from "@/pages/LoginPage";
 import AppLayout from "@/components/AppLayout";
@@ -24,10 +25,7 @@ function App() {
           >
             <Route path="/" element={<MainPage />} />
             <Route path="/settings" element={<SettingsPage />} />
-            <Route
-              path="/settings/devices"
-              element={<ComingSoonPage title="기기 관리" />}
-            />
+            <Route path="/settings/devices" element={<DeviceListPage />} />
             <Route
               path="/settings/device/:id"
               element={<DeviceSettingPage />}
