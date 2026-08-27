@@ -6,6 +6,9 @@ import AlertInfoPage from "@/pages/AlertInfoPage";
 import DeviceSettingPage from "@/pages/DeviceSettingPage";
 import DeviceListPage from "@/pages/DeviceListPage";
 import FamilySettingsPage from "@/pages/FamilySettingsPage";
+import NotificationSettingsPage from "@/pages/NotificationSettingsPage";
+import PasswordSettingsPage from "@/pages/PasswordSettingsPage";
+import ProfilePage from "@/pages/ProfilePage";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 import LoginPage from "@/pages/LoginPage";
 import AppLayout from "@/components/AppLayout";
@@ -34,20 +37,18 @@ function App() {
             <Route path="/settings/family" element={<FamilySettingsPage />} />
             <Route
               path="/settings/notifications"
-              element={<ComingSoonPage title="알림 설정" />}
+              element={<NotificationSettingsPage />}
             />
+            {/* 소리 설정은 9월 평가 후 구현 예정 (백엔드 회신 1번) */}
             <Route
               path="/settings/sound"
               element={<ComingSoonPage title="소리 설정" />}
             />
             <Route
               path="/settings/password"
-              element={<ComingSoonPage title="비밀번호 설정" />}
+              element={<PasswordSettingsPage />}
             />
-            <Route
-              path="/settings/profile"
-              element={<ComingSoonPage title="개인정보 조회" />}
-            />
+            <Route path="/settings/profile" element={<ProfilePage />} />
             <Route path="/alerts" element={<AlertsPage />} />
             <Route path="/alerts/:id" element={<AlertInfoPage />} />
           </Route>
