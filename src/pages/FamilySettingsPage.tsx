@@ -20,7 +20,9 @@ export default function FamilySettingsPage() {
   // PATCH .../display-name — 현재 사용자 화면에만 적용되는 별칭
   const saveName = (userId: string, name: string) => {
     setMembers((prev) =>
-      prev.map((m) => (m.user_id === userId ? { ...m, display_name: name } : m)),
+      prev.map((m) =>
+        m.user_id === userId ? { ...m, display_name: name } : m,
+      ),
     );
   };
 

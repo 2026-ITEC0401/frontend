@@ -26,9 +26,19 @@ export default function ProfilePage() {
         <dl className="m-0 flex flex-col rounded-2xl bg-white px-5 py-1 shadow-02">
           <InfoRow label="로그인 아이디" value={me.login_id} />
           <InfoRow label="이름" value={me.name} />
-          <InfoRow label="휴대폰 번호" value={formatPhoneNumber(me.phone_number)} />
-          <InfoRow label="계정 유형" value={ACCOUNT_TYPE_LABEL[me.account_type]} />
-          <InfoRow label="가입일" value={formatJoinedDate(me.created_at)} last />
+          <InfoRow
+            label="휴대폰 번호"
+            value={formatPhoneNumber(me.phone_number)}
+          />
+          <InfoRow
+            label="계정 유형"
+            value={ACCOUNT_TYPE_LABEL[me.account_type]}
+          />
+          <InfoRow
+            label="가입일"
+            value={formatJoinedDate(me.created_at)}
+            last
+          />
         </dl>
       </div>
     </div>

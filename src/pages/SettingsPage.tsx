@@ -56,7 +56,11 @@ export default function SettingsPage() {
             value={`${totalDevices}대 중 ${connectedDevices}대 연결`}
             to="/settings/devices"
           />
-          <MenuRow label="소리 설정" value="긴급 4 · 일반 3" to="/settings/sound" />
+          <MenuRow
+            label="소리 설정"
+            value="긴급 4 · 일반 3"
+            to="/settings/sound"
+          />
         </MenuGroup>
 
         {/* 메뉴 그룹 2 — 계정·가족 */}
