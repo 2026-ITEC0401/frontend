@@ -4,6 +4,7 @@ import SettingsPage from "@/pages/SettingsPage";
 import AlertsPage from "@/pages/AlertsPage";
 import AlertInfoPage from "@/pages/AlertInfoPage";
 import DeviceSettingPage from "@/pages/DeviceSettingPage";
+import ComingSoonPage from "@/pages/ComingSoonPage";
 import LoginPage from "@/pages/LoginPage";
 import AppLayout from "@/components/AppLayout";
 import RequireAuth from "@/components/RequireAuth";
@@ -24,8 +25,32 @@ function App() {
             <Route path="/" element={<MainPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route
+              path="/settings/devices"
+              element={<ComingSoonPage title="기기 관리" />}
+            />
+            <Route
               path="/settings/device/:id"
               element={<DeviceSettingPage />}
+            />
+            <Route
+              path="/settings/family"
+              element={<ComingSoonPage title="가족 설정" />}
+            />
+            <Route
+              path="/settings/notifications"
+              element={<ComingSoonPage title="알림 설정" />}
+            />
+            <Route
+              path="/settings/sound"
+              element={<ComingSoonPage title="소리 설정" />}
+            />
+            <Route
+              path="/settings/password"
+              element={<ComingSoonPage title="비밀번호 설정" />}
+            />
+            <Route
+              path="/settings/profile"
+              element={<ComingSoonPage title="개인정보 조회" />}
             />
             <Route path="/alerts" element={<AlertsPage />} />
             <Route path="/alerts/:id" element={<AlertInfoPage />} />
