@@ -65,3 +65,8 @@ export interface AlertHistoryResponse {
   total_count: number;
   days: AlertHistoryDay[];
 }
+
+// §7.2 최근 알림 응답
+export interface AlertLatestResponse {
+  alarm: AlertListItem | null;
+}

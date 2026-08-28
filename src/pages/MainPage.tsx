@@ -1,18 +1,16 @@
-import { db } from "@/firebase";
-import {
-  collection,
-  onSnapshot,
-  query,
-  orderBy,
-  limit,
-} from "firebase/firestore";
-
 import { useState, useEffect } from "react";
 import AlertCard from "@/components/AlertCard";
 import Notification from "@/components/Notification";
 import Room from "@/components/Room";
 import FullScreenAlert from "@/components/FullScreenAlert";
-import { type AlertWebData, type AlertRealtime } from "@/types/alert";
+import { type AlertWebData } from "@/types/alert";
+
+import { getLatestAlarm } from "@/api/alarmApi";
+import { getHouseholdId } from "@/lib/auth";
+import type { RoomDevice } from "@/types/room";
+
+import { connectWs } from "@/lib/ws";
+import { toWebDataFromRealtime, toWebDataFromList } from "@/utils/alertMapper";
 
 // 목업 데이터 - IS_MOCK_MODE 로 서버 연결/해제 가능
 import { mockDeviceData } from "@/mocks/room";
@@ -25,60 +23,57 @@ export default function MainPage() {
   const [alertList, setAlertList] = useState<AlertWebData[]>(
     IS_MOCK_MODE ? mockAlertData : [],
   );
-
+  const [deviceList, setDeviceList] = useState<RoomDevice[]>(
+    IS_MOCK_MODE ? mockDeviceData : [],
+  );
+  // 초기 로드 — 앱 진입 시점의 최신 알림 1건 (REST)
   useEffect(() => {
-    if (IS_MOCK_MODE) {
-      return;
-    }
+    if (IS_MOCK_MODE) return;
 
-    // time을 기준으로 최신순 정렬
-    const q = query(
-      collection(db, "alarms"),
-      orderBy("time", "desc"),
-      limit(1),
+    const household_id = getHouseholdId();
+    if (!household_id) return;
+
+    getLatestAlarm(household_id)
+      .then((res) => {
+        if (res.alarm) {
+          const webData = toWebDataFromList(res.alarm);
+          setAlertList((prev) =>
+            prev.some((a) => a.id === webData.id) ? prev : [...prev, webData],
+          );
+        }
+      })
+      .catch((e) => {
+        console.error("최신 알림 로드 실패", e);
+      });
+  }, []);
+
+  // 실시간 알림 (WebSocket)
+  useEffect(() => {
+    if (IS_MOCK_MODE) return;
+
+    const household_id = getHouseholdId();
+    if (!household_id) return;
+
+    const ws = connectWs(
+      household_id,
+      (alarm) => {
+        const webData = toWebDataFromRealtime(alarm);
+        setCurrentAlert(webData);
+        setAlertList((prev) => [webData, ...prev]);
+      },
+      (devices) => {
+        setDeviceList(devices);
+      },
+      (device_id, ui_status) => {
+        setDeviceList((prev) =>
+          prev.map((d) =>
+            d.device_id === device_id ? { ...d, ui_status } : d,
+          ),
+        );
+      },
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === "added") {
-          // 파이어베이스에서 막 도착한 순수 원본 데이터
-          const serverData = change.doc.data() as AlertRealtime;
-
-          // 🚨 F12 관리자 모드 콘솔창에 데이터 찍기
-          console.log("====================================");
-          console.log("📡 [서버 원본 데이터 수신] :", serverData);
-          console.log("====================================");
-
-          let displayTime = "시간 오류";
-          if (serverData.time) {
-            displayTime = new Date(serverData.time).toLocaleTimeString(
-              "ko-KR",
-              {
-                hour: "2-digit",
-                minute: "2-digit",
-              },
-            );
-          }
-
-          const finalAlertData: AlertWebData = {
-            id: serverData.id || change.doc.id,
-            display_time: displayTime,
-            location: serverData.location,
-            sound: serverData.sound,
-            raw_label: serverData.raw_label,
-            type: serverData.type,
-          };
-
-          console.log("🛠️ [UI 변환 결과 프리뷰] :", finalAlertData);
-
-          // 💡 화면 렌더링 실행: 주석을 해제하여 콘솔 로그 출력과 함께 화면 팝업도 띄웁니다.
-          setCurrentAlert(finalAlertData);
-          setAlertList((prev) => [finalAlertData, ...prev]);
-        }
-      });
-    });
-
-    return () => unsubscribe();
+    return () => ws.close();
   }, []);
 
   return (
@@ -93,7 +88,7 @@ export default function MainPage() {
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-2">
-            {mockDeviceData.map((device) => (
+            {deviceList.map((device) => (
               <Room
                 key={device.device_id}
                 device_id={device.device_id}
