@@ -17,12 +17,18 @@ export function connectWs(
   };
 
   ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
+    let msg;
+    try {
+      msg = JSON.parse(event.data);
+    } catch {
+      return; // JSON이 아닌 프레임은 무시 (§10.8)
+    }
+
     if (msg.type === "alarm.created") {
       onAlarm(msg.alarm);
     } else if (msg.type === "connection.ready") {
       onDevices(msg.devices);
-    } else if (msg.type == "device.status_changed") {
+    } else if (msg.type === "device.status_changed") {
       onDeviceStatus(msg.device_id, msg.ui_status);
     }
     // 그 외 타입은 무시 (§10.8)
