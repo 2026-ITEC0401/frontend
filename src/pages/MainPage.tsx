@@ -36,7 +36,10 @@ export default function MainPage() {
     getLatestAlarm(household_id)
       .then((res) => {
         if (res.alarm) {
-          setAlertList([toWebDataFromList(res.alarm)]);
+          const webData = toWebDataFromList(res.alarm);
+          setAlertList((prev) =>
+            prev.some((a) => a.id === webData.id) ? prev : [...prev, webData],
+          );
         }
       })
       .catch((e) => {
