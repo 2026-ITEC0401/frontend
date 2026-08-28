@@ -14,6 +14,10 @@ import Room from "@/components/Room";
 import FullScreenAlert from "@/components/FullScreenAlert";
 import { type AlertWebData, type AlertRealtime } from "@/types/alert";
 
+import { getLatestAlarm } from "@/api/alarmApi";
+import { toWebDataFromList } from "@/utils/alertMapper";
+import { getHouseholdId } from "@/lib/auth";
+
 // 목업 데이터 - IS_MOCK_MODE 로 서버 연결/해제 가능
 import { mockDeviceData } from "@/mocks/room";
 import { mockUnreadCount, mockAlertData } from "@/mocks/alert";
@@ -26,6 +30,25 @@ export default function MainPage() {
     IS_MOCK_MODE ? mockAlertData : [],
   );
 
+  // 초기 로드 — 앱 진입 시점의 최신 알림 1건 (REST)
+  useEffect(() => {
+    if (IS_MOCK_MODE) return;
+
+    const household_id = getHouseholdId();
+    if (!household_id) return;
+
+    getLatestAlarm(household_id)
+      .then((res) => {
+        if (res.alarm) {
+          setAlertList([toWebDataFromList(res.alarm)]);
+        }
+      })
+      .catch((e) => {
+        console.error("최신 알림 로드 실패", e);
+      });
+  }, []);
+
+  // 실시간 구독 — 곧 WebSocket으로 교체 예정
   useEffect(() => {
     if (IS_MOCK_MODE) {
       return;
