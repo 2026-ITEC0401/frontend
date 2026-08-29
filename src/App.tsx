@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "@/pages/MainPage";
+import StartPage from "@/pages/StartPage";
 import SettingsPage from "@/pages/SettingsPage";
 import AlertsPage from "@/pages/AlertsPage";
 import AlertInfoPage from "@/pages/AlertInfoPage";
@@ -13,17 +14,23 @@ import ComingSoonPage from "@/pages/ComingSoonPage";
 import LoginPage from "@/pages/LoginPage";
 import AppLayout from "@/components/AppLayout";
 import RequireAuth from "@/components/RequireAuth";
+import MainLayout from "@/components/MainLayout";
 
 function App() {
   return (
     <BrowserRouter>
       <AppLayout>
         <Routes>
+          {/* Nav 없는 화면 */}
+
+          <Route path="/start" element={<StartPage />} />
           <Route path="/login" element={<LoginPage />} />
+
+          {/* Nav 있는 화면 */}
           <Route
             element={
               <RequireAuth>
-                <Outlet />
+                <MainLayout />
               </RequireAuth>
             }
           >

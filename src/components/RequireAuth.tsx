@@ -7,7 +7,7 @@ export default function RequireAuth({
   children: React.ReactNode;
 }) {
   if (!getAccessToken() || !getHouseholdId()) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/start" replace />;
   }
   return <>{children}</>;
 }
