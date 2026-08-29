@@ -7,7 +7,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-const BASE_STYLE = "w-full h-15 cursor-pointer rounded-xl text-subtitle-01";
+const BASE_STYLE = "w-full h-14 cursor-pointer rounded-xl text-subtitle-01";
 const VARIANT_STYLES: Record<ButtonVariant, string> = {
   primary: "bg-main-200 text-gray-400",
   dark: "bg-gray-500 text-gray-100 disabled:bg-gray-200",
