@@ -117,7 +117,7 @@ export default function HouseholdAddressPage() {
               검색 결과 {results.length}건
             </p>
 
-            <div className="flex max-h-80 flex-col gap-2 overflow-y-auto">
+            <div className="flex max-h-96 flex-col gap-2 overflow-y-auto pr-2">
               {results.map((item) => (
                 <button
                   key={item.postal_code + item.road_address}
@@ -145,6 +145,7 @@ export default function HouseholdAddressPage() {
           </div>
         ) : null}
 
+        <div className="flex-1" />
         {/* 안내 문구 */}
         <div className="rounded-xl border-2 border-main-200 bg-main-100 p-4">
           <p className="text-body-01 text-gray-500">
@@ -153,8 +154,6 @@ export default function HouseholdAddressPage() {
             다시 열면 이 화면부터 시작합니다.
           </p>
         </div>
-
-        <div className="flex-1" />
 
         <Button
           variant="dark"
