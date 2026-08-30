@@ -77,3 +77,9 @@ export interface HouseholdLinkResponse {
   role: HouseholdRole;
   linked_at: string;
 }
+
+export interface AddressSearchResult {
+  postal_code: string;
+  road_address: string;
+  jibun_address: string;
+}
