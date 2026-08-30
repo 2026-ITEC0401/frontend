@@ -1,24 +1,47 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import EmergencyActions from "@/components/EmergencyActions";
 import Header from "@/components/Header";
+import { getAlarmDetail } from "@/api/alarmApi";
+import { ApiError } from "@/lib/api";
+import { getHouseholdId } from "@/lib/auth";
 import { ALERT_CONFIG } from "@/constants/alert";
-import { mockAlertData } from "@/mocks/alert";
+import { type AlertWebData } from "@/types/alert";
+import { toWebDataFromDetail } from "@/utils/alertMapper";
 import { toAlertTimeParts } from "@/utils/alertTime";
 
 export default function AlertInfoPage() {
   const { id } = useParams<{ id: string }>();
-  const alert = mockAlertData.find((a) => String(a.id) === id);
+  const householdId = getHouseholdId();
 
-  if (!alert) {
-    return (
-      <div className="flex min-h-screen flex-col bg-gray-100">
-        <Header title="상세 보기" />
-        <div className="flex flex-1 items-center justify-center text-body-01 text-gray-300">
-          알림을 찾을 수 없어요.
-        </div>
-      </div>
-    );
-  }
+  const [alert, setAlert] = useState<AlertWebData | null>(null);
+  const [loading, setLoading] = useState(!!(householdId && id));
+  const [notFound, setNotFound] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!householdId || !id) return;
+    let alive = true;
+    getAlarmDetail(householdId, id)
+      .then((res) => alive && setAlert(toWebDataFromDetail(res.alarm)))
+      .catch((e) => {
+        if (!alive) return;
+        if (e instanceof ApiError && e.status === 404) setNotFound(true);
+        else
+          setError(
+            e instanceof ApiError ? e.message : "알림을 불러오지 못했어요.",
+          );
+      })
+      .finally(() => alive && setLoading(false));
+    return () => {
+      alive = false;
+    };
+  }, [householdId, id]);
+
+  if (loading) return <Fallback>불러오는 중…</Fallback>;
+  if (notFound) return <Fallback>알림을 찾을 수 없어요.</Fallback>;
+  if (error) return <Fallback tone="error">{error}</Fallback>;
+  if (!alert) return <Fallback>알림을 찾을 수 없어요.</Fallback>;
 
   const config = ALERT_CONFIG[alert.type];
   const { date, meridiem, clock } = toAlertTimeParts(alert);
@@ -45,12 +68,33 @@ export default function AlertInfoPage() {
           <InfoRow label="날짜" value={date} />
           <InfoRow label={meridiem} value={clock} />
           <InfoRow label="위치" value={alert.location} />
-          {/* 과거 알림은 raw_label이 null이라 상위 소리 이름으로 대체한다 (명세 §7.4) */}
+          {/* 과거 알림은 raw_label이 null이라 상위 소리 이름으로 대체한다 */}
           <InfoRow label="소리" value={alert.raw_label ?? alert.sound} />
         </dl>
       </div>
 
       {alert.type === "Urgent" && <EmergencyActions alert={alert} />}
+    </div>
+  );
+}
+
+function Fallback({
+  children,
+  tone,
+}: {
+  children: React.ReactNode;
+  tone?: "error";
+}) {
+  return (
+    <div className="flex min-h-screen flex-col bg-gray-100">
+      <Header title="상세 보기" />
+      <div
+        className={`flex flex-1 items-center justify-center text-body-01 ${
+          tone === "error" ? "text-red-200" : "text-gray-300"
+        }`}
+      >
+        {children}
+      </div>
     </div>
   );
 }

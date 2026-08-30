@@ -70,3 +70,8 @@ export interface AlertHistoryResponse {
 export interface AlertLatestResponse {
   alarm: AlertListItem | null;
 }
+
+// 알림 상세 응답 (GET /households/{id}/alarms/{alarm_id})
+export interface AlertDetailResponse {
+  alarm: AlertDetail;
+}

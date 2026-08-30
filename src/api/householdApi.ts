@@ -1,9 +1,16 @@
 import { request } from "@/lib/api";
 import type {
   CurrentHouseholdResponse,
+  EmergencyAddress,
   InviteCodeResponse,
   MembersResponse,
 } from "@/types/household";
+
+export async function getEmergencyAddress(household_id: string) {
+  return request<EmergencyAddress>(
+    `/households/${household_id}/emergency-address`,
+  );
+}
 
 export async function getCurrentHousehold() {
   return request<CurrentHouseholdResponse>("/households/current");
