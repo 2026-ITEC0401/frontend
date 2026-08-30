@@ -17,6 +17,8 @@ export type DeviceId = "rpi-001" | "esp32_1" | "esp32_2" | "esp32_3";
 export type DeviceUiStatus =
   "connected" | "disabled_by_owner" | "pending" | "offline" | "error";
 
+export type DeviceNetworkStatus = "online" | "offline";
+
 // 명세 §6.1 GET /households/{id}/devices
 export interface RoomDevice {
   device_id: DeviceId;
@@ -25,4 +27,9 @@ export interface RoomDevice {
   desired_mqtt_connected: boolean; // 사용자가 키고 끄는 값
   ui_status: DeviceUiStatus; // 실제 기기의 상태
   led_alert_enabled: boolean;
+  // 아래는 §6.1 조회 응답 부가 필드 (표시/디버깅용, 없을 수 있음)
+  reported_mqtt_connected?: boolean;
+  network_status?: DeviceNetworkStatus;
+  last_seen_at?: string;
+  config_version?: number;
 }
