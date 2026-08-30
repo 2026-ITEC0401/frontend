@@ -11,7 +11,43 @@ export interface EmergencyAddress {
 // 명세 §5.5 가족 구성원
 export interface HouseholdMember {
   user_id: string;
+  // 가입 시 실제 이름 (표시 이름 초기화 시 복원되는 값)
+  profile_name: string;
+  // 호출자에게 적용된 표시 이름. 별칭이 없으면 profile_name과 동일
   display_name: string;
+  // display_name이 호출자가 지정한 개인 별칭인지 여부
+  display_name_is_custom: boolean;
   phone_number: string;
   role: HouseholdRole;
+  linked_at: string;
+  // 현재 로그인 사용자 본인 여부
+  is_me: boolean;
+  // 이 구성원의 표시 이름을 편집할 수 있는지 (본인 카드는 false)
+  can_edit_display_name: boolean;
+}
+
+// 명세 §5.5 GET /households/{id}/members
+export interface MembersResponse {
+  members: HouseholdMember[];
+}
+
+// 명세 §5.1 GET /households/current
+export interface CurrentHouseholdResponse {
+  household_link_status: "linked" | "unlinked";
+  household: {
+    household_id: string;
+    name: string;
+    member_count: number;
+    created_at: string;
+  } | null;
+  membership: {
+    role: HouseholdRole;
+    linked_at: string;
+  } | null;
+}
+
+// 명세 §5.2 GET /households/{id}/invite-code · rotate
+export interface InviteCodeResponse {
+  invite_code: string;
+  expires_at: string;
 }
