@@ -51,3 +51,29 @@ export interface InviteCodeResponse {
   invite_code: string;
   expires_at: string;
 }
+
+// 명세 §5.3 / §5.4 초대 코드 요청
+export interface HouseholdLinkRequest {
+  invite_code: string;
+}
+
+export interface HouseholdPreviewInfo {
+  name: string;
+  member_count: number;
+  created_at: string;
+}
+
+// 명세 §5.3 초대 코드로 가구 미리보기
+// linkable이 false일 때 대비 null (명세에는 없긴함)
+export interface HouseholdLinkPreview {
+  linkable: boolean;
+  household: HouseholdPreviewInfo | null;
+}
+
+// 명세 §5.4 가구 연동
+export interface HouseholdLinkResponse {
+  household_link_status: "linked";
+  household_id: string;
+  role: HouseholdRole;
+  linked_at: string;
+}
