@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import AlertHistoryGroup from "@/components/AlertHistoryGroup";
-import { getAlarmHistory } from "@/api/alarmApi";
+import { getAlarmHistory, markAlarmsSeen } from "@/api/alarmApi";
 import { ApiError } from "@/lib/api";
 import { getHouseholdId } from "@/lib/auth";
 import { type AlertHistoryResponse } from "@/types/alert";
@@ -16,7 +16,13 @@ export default function AlertsPage() {
     if (!householdId) return;
     let alive = true;
     getAlarmHistory(householdId)
-      .then((res) => alive && setHistory(res))
+      .then((res) => {
+        // 이력 조회 성공 = 알림 목록을 확인함 → 모두 확인 처리 (배지 0)
+        markAlarmsSeen(householdId).catch((e) =>
+          console.error("알림 확인 처리 실패", e),
+        );
+        if (alive) setHistory(res);
+      })
       .catch(
         (e) =>
           alive &&

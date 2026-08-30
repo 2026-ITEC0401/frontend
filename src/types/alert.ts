@@ -75,3 +75,16 @@ export interface AlertLatestResponse {
 export interface AlertDetailResponse {
   alarm: AlertDetail;
 }
+
+// 미확인 알림 개수 (GET /households/{id}/alarms/unread-count)
+export interface UnreadCountResponse {
+  unread_count: number;
+  last_seen_at: string;
+  window_days: number;
+}
+
+// 알림 모두 확인 (PATCH /households/{id}/alarms/seen)
+export interface SeenResponse {
+  unread_count: number;
+  last_seen_at: string;
+}
