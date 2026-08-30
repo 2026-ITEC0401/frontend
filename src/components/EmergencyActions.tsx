@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Mail, Phone } from "lucide-react";
 import {
   EMERGENCY_NUMBER,
@@ -5,12 +6,10 @@ import {
   buildFamilyNoticeBody,
   buildReportBody,
 } from "@/constants/emergency";
-import {
-  MOCK_MY_USER_ID,
-  mockEmergencyAddress,
-  mockMembers,
-} from "@/mocks/household";
+import { getEmergencyAddress, getMembers } from "@/api/householdApi";
+import { getHouseholdId } from "@/lib/auth";
 import { type AlertWebData } from "@/types/alert";
+import { type EmergencyAddress, type HouseholdMember } from "@/types/household";
 import { toAlertTimeParts } from "@/utils/alertTime";
 import { buildSmsHref } from "@/utils/sms";
 
@@ -22,23 +21,55 @@ interface EmergencyActionsProps {
 }
 
 export default function EmergencyActions({ alert }: EmergencyActionsProps) {
-  const me = mockMembers.find((m) => m.user_id === MOCK_MY_USER_ID);
-  const owner = mockMembers.find((m) => m.role === "owner");
-  const { stamp } = toAlertTimeParts(alert);
+  const householdId = getHouseholdId();
+  const [members, setMembers] = useState<HouseholdMember[]>([]);
+  const [address, setAddress] = useState<EmergencyAddress | null>(null);
+  const [loading, setLoading] = useState(!!householdId);
 
-  // 본인을 제외한 나머지 가구 구성원 전체
-  const familyPhones = mockMembers
-    .filter((m) => m.user_id !== MOCK_MY_USER_ID)
+  // 권한(role)·가족 전화·긴급 주소를 실데이터로 확보. 주소는 미등록(404)일 수 있다.
+  useEffect(() => {
+    if (!householdId) return;
+    let alive = true;
+    Promise.all([
+      getMembers(householdId).then((r) => r.members),
+      getEmergencyAddress(householdId).catch(() => null),
+    ])
+      .then(([memberList, addr]) => {
+        if (!alive) return;
+        setMembers(memberList);
+        setAddress(addr);
+      })
+      .catch(() => {})
+      .finally(() => alive && setLoading(false));
+    return () => {
+      alive = false;
+    };
+  }, [householdId]);
+
+  const me = members.find((m) => m.is_me);
+  const isOwner = me?.role === "owner";
+  const owner = members.find((m) => m.role === "owner");
+  const familyPhones = members
+    .filter((m) => !m.is_me)
     .map((m) => m.phone_number);
+  const { stamp } = toAlertTimeParts(alert);
 
   // 딥링크는 반드시 클릭 핸들러 안에서 호출해야 한다. 자동 실행은 브라우저가 차단한다.
   const openSms = (recipients: string[], body?: string) => {
     window.location.href = buildSmsHref(recipients, body);
   };
 
+  if (loading) {
+    return (
+      <div className="px-5 pt-8 text-center text-body-02 text-gray-300">
+        불러오는 중…
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6 px-5 pt-8">
-      {me?.role === "owner" ? (
+      {isOwner ? (
         <>
           <button
             type="button"
@@ -50,11 +81,13 @@ export default function EmergencyActions({ alert }: EmergencyActionsProps) {
           </button>
           <button
             type="button"
-            className={buttonClass}
+            disabled={!address}
+            className={`${buttonClass} disabled:opacity-40`}
             onClick={() =>
+              address &&
               openSms(
                 [EMERGENCY_NUMBER],
-                buildReportBody(mockEmergencyAddress, stamp, alert.sound),
+                buildReportBody(address, stamp, alert.sound),
               )
             }
           >
@@ -63,7 +96,8 @@ export default function EmergencyActions({ alert }: EmergencyActionsProps) {
           </button>
           <button
             type="button"
-            className={buttonClass}
+            disabled={familyPhones.length === 0}
+            className={`${buttonClass} disabled:opacity-40`}
             onClick={() =>
               openSms(
                 familyPhones,
@@ -90,7 +124,7 @@ export default function EmergencyActions({ alert }: EmergencyActionsProps) {
           >
             <Mail size={24} />
             {owner ? (
-              // 명세 §5.5 display_name (보호자가 지정한 별칭, 없으면 가입 시 이름)
+              // §5.5 display_name (보호자가 지정한 별칭, 없으면 가입 시 이름)
               <span className="flex min-w-0">
                 <span className="truncate">{owner.display_name}</span>
                 <span className="shrink-0">에게 문자 전송</span>
