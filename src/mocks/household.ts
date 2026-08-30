@@ -56,7 +56,7 @@ export const mockMembers: HouseholdMember[] = [
 export const mockLinkPreview: HouseholdLinkPreview = {
   linkable: true,
   household: {
-    name: "장원석 가구",
+    name: "복현동 장원석 가구",
     member_count: 3,
     created_at: "2026-08-17T03:00:00Z",
   },
