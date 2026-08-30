@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import { useState } from "react";
 import type { SignupType } from "@/types/signup";
 import { Check } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface SignupFormPageProps {
   signupType: SignupType;
@@ -16,6 +17,7 @@ export default function SignupFormPage({ signupType }: SignupFormPageProps) {
   const [password, setPassword] = useState("");
   const [password_check, setPasswordCheck] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const navigate = useNavigate();
   const isNew = signupType === "new_household";
 
   // 빈 칸 없음 + 비밀번호 일치. 상세 규칙(§2.3)은 서버 field_errors로 처리
@@ -130,7 +132,11 @@ export default function SignupFormPage({ signupType }: SignupFormPageProps) {
             서비스 이용약관 · 개인정보 동의 (필수)
           </span>
         </button>
-        <Button variant="dark" onClick={() => {}} disabled={!isFormValid}>
+        <Button
+          variant="dark"
+          onClick={() => navigate(isNew ? "/signup/address" : "/signup/invite")}
+          disabled={!isFormValid}
+        >
           가입 완료
         </Button>
       </div>
