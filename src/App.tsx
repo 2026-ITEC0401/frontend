@@ -15,6 +15,7 @@ import LoginPage from "@/pages/LoginPage";
 import SignupTypePage from "@/pages/SignupTypePage";
 import SignupFormPage from "@/pages/SignupFormPage";
 import InviteCodePage from "@/pages/InviteCodePage";
+import HouseholdLinkPage from "@/pages/HouseholdLinkPage";
 import AppLayout from "@/components/AppLayout";
 import RequireAuth from "@/components/RequireAuth";
 import MainLayout from "@/components/MainLayout";
@@ -38,6 +39,8 @@ function App() {
             element={<SignupFormPage signupType="family_member" />}
           />
           <Route path="/signup/invite" element={<InviteCodePage />} />
+          <Route path="/signup/link" element={<HouseholdLinkPage />} />
+
           {/* Nav 있는 화면 */}
           <Route
             element={
