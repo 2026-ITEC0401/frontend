@@ -16,3 +16,10 @@ export async function refresh(refresh_token: string) {
     body: { refresh_token },
   });
 }
+
+export async function logout(refresh_token: string) {
+  return request<void>("/auth/logout", {
+    method: "POST",
+    body: { refresh_token },
+  });
+}
