@@ -12,6 +12,8 @@ import PasswordSettingsPage from "@/pages/PasswordSettingsPage";
 import ProfilePage from "@/pages/ProfilePage";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 import LoginPage from "@/pages/LoginPage";
+import SignupTypePage from "@/pages/SignupTypePage";
+import SignupFormPage from "@/pages/SignupFormPage";
 import AppLayout from "@/components/AppLayout";
 import RequireAuth from "@/components/RequireAuth";
 import MainLayout from "@/components/MainLayout";
@@ -25,7 +27,15 @@ function App() {
 
           <Route path="/start" element={<StartPage />} />
           <Route path="/login" element={<LoginPage />} />
-
+          <Route path="/signup" element={<SignupTypePage />} />
+          <Route
+            path="/signup/new"
+            element={<SignupFormPage signupType="new_household" />}
+          />
+          <Route
+            path="/signup/family"
+            element={<SignupFormPage signupType="family_member" />}
+          />
           {/* Nav 있는 화면 */}
           <Route
             element={

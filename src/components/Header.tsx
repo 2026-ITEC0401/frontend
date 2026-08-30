@@ -11,7 +11,7 @@ export default function Header({ title, showBackButton = true }: HeaderProps) {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-50 flex h-18 items-center bg-white px-4">
+    <header className="sticky top-0 z-50 flex h-18 items-center bg-gray-100 px-4">
       {showBackButton && (
         <button
           type="button"
