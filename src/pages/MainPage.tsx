@@ -6,51 +6,42 @@ import FullScreenAlert from "@/components/FullScreenAlert";
 import { type AlertWebData } from "@/types/alert";
 
 import { getLatestAlarm } from "@/api/alarmApi";
+import { getDevices } from "@/api/deviceApi";
 import { getHouseholdId } from "@/lib/auth";
 import type { RoomDevice } from "@/types/room";
 
 import { connectWs } from "@/lib/ws";
 import { toWebDataFromRealtime, toWebDataFromList } from "@/utils/alertMapper";
 
-// 목업 데이터 - IS_MOCK_MODE 로 서버 연결/해제 가능
-import { mockDeviceData } from "@/mocks/room";
-import { mockUnreadCount, mockAlertData } from "@/mocks/alert";
-import { IS_MOCK_MODE } from "@/mocks/config";
-import MockAlertTrigger from "@/mocks/MockAlertTrigger";
+// unread 배너 개수는 서버 API 미정으로 임시 플레이스홀더 (백엔드 회신 대기)
+import { mockUnreadCount } from "@/mocks/alert";
 
 export default function MainPage() {
   const [currentAlert, setCurrentAlert] = useState<null | AlertWebData>(null);
-  const [alertList, setAlertList] = useState<AlertWebData[]>(
-    IS_MOCK_MODE ? mockAlertData : [],
-  );
-  const [deviceList, setDeviceList] = useState<RoomDevice[]>(
-    IS_MOCK_MODE ? mockDeviceData : [],
-  );
-  // 초기 로드 — 앱 진입 시점의 최신 알림 1건 (REST)
-  useEffect(() => {
-    if (IS_MOCK_MODE) return;
+  const [alertList, setAlertList] = useState<AlertWebData[]>([]);
+  const [deviceList, setDeviceList] = useState<RoomDevice[]>([]);
 
+  useEffect(() => {
     const household_id = getHouseholdId();
     if (!household_id) return;
+
+    getDevices(household_id)
+      .then((res) => setDeviceList(res.devices))
+      .catch((e) => console.error("기기 목록 로드 실패", e));
 
     getLatestAlarm(household_id)
       .then((res) => {
         if (res.alarm) {
           const webData = toWebDataFromList(res.alarm);
           setAlertList((prev) =>
-            prev.some((a) => a.id === webData.id) ? prev : [...prev, webData],
+            prev.some((a) => a.id === webData.id) ? prev : [webData, ...prev],
           );
         }
       })
-      .catch((e) => {
-        console.error("최신 알림 로드 실패", e);
-      });
+      .catch((e) => console.error("최신 알림 로드 실패", e));
   }, []);
 
-  // 실시간 알림 (WebSocket)
   useEffect(() => {
-    if (IS_MOCK_MODE) return;
-
     const household_id = getHouseholdId();
     if (!household_id) return;
 
@@ -61,16 +52,13 @@ export default function MainPage() {
         setCurrentAlert(webData);
         setAlertList((prev) => [webData, ...prev]);
       },
-      (devices) => {
-        setDeviceList(devices);
-      },
-      (device_id, ui_status) => {
+      (devices) => setDeviceList(devices),
+      (device_id, ui_status) =>
         setDeviceList((prev) =>
           prev.map((d) =>
             d.device_id === device_id ? { ...d, ui_status } : d,
           ),
-        );
-      },
+        ),
     );
 
     return () => ws.close();
@@ -116,7 +104,6 @@ export default function MainPage() {
             ))}
           </div>
         </div>
-        {IS_MOCK_MODE && <MockAlertTrigger onTrigger={setCurrentAlert} />}
       </div>
 
       {currentAlert && (
