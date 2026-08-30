@@ -53,7 +53,11 @@ export default function InviteCodePage() {
         </div>
         <div className="flex-1" />
 
-        <Button variant="dark" onClick={() => {}} disabled={code.length !== 6}>
+        <Button
+          variant="dark"
+          onClick={() => navigate("/signup/link")}
+          disabled={code.length !== 6}
+        >
           가구 찾기
         </Button>
       </div>
