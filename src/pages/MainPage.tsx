@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import AlertCard from "@/components/AlertCard";
 import Notification from "@/components/Notification";
 import Room from "@/components/Room";
+import Button from "@/components/Button";
 import FullScreenAlert from "@/components/FullScreenAlert";
 import { type AlertWebData } from "@/types/alert";
 
@@ -15,6 +16,7 @@ import { toWebDataFromRealtime, toWebDataFromList } from "@/utils/alertMapper";
 
 // unread 배너 개수는 서버 API 미정으로 임시 플레이스홀더 (백엔드 회신 대기)
 import { mockUnreadCount } from "@/mocks/alert";
+import { useNavigate } from "react-router-dom";
 
 export default function MainPage() {
   const [currentAlert, setCurrentAlert] = useState<null | AlertWebData>(null);
@@ -64,6 +66,12 @@ export default function MainPage() {
     return () => ws.close();
   }, []);
 
+  const household_id = getHouseholdId();
+  // 미연동 사용자 — 가구가 없으면 초대 코드 안내만 표시
+  if (!household_id) {
+    return <EmptyHouseholdView />;
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-500">
       <div className="flex flex-col gap-5 bg-gray-500 px-5 py-4">
@@ -112,6 +120,26 @@ export default function MainPage() {
           onClose={() => setCurrentAlert(null)}
         />
       )}
+    </div>
+  );
+}
+
+function EmptyHouseholdView() {
+  const navigate = useNavigate();
+  return (
+    <div className="flex min-h-screen flex-col bg-gray-100 px-5 pt-10 pb-25">
+      <div className="rounded-2xl bg-white p-6 shadow-03">
+        <h1 className="text-head-03 text-gray-500">등록된 가구가 없습니다</h1>
+        <p className="mt-2 text-body-01 text-gray-300">
+          설정 › 가구 등록에서 시작하거나, <br />
+          가족에게 받은 초대 코드를 입력해 주세요.
+        </p>
+        <div className="mt-6">
+          <Button variant="dark" onClick={() => navigate("/signup/invite")}>
+            초대 코드 입력
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
