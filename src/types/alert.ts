@@ -1,6 +1,6 @@
 import { type DeviceId, type RoomLabel } from "@/types/room";
 
-// 알람 종류 : 방문자 | 화재 | 소음
+// 알람 종류 : 방문자 | 긴급 | 소음
 export type AlertType = "Visitor" | "Urgent" | "Noise";
 
 // 전체 공통 데이터
