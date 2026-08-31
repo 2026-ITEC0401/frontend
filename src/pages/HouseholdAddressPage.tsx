@@ -19,7 +19,6 @@ export default function HouseholdAddressPage() {
   const navigate = useNavigate();
 
   const handleSearch = async () => {
-    setSearched(true);
     setSelected(null);
     setError(null);
 
@@ -29,11 +28,14 @@ export default function HouseholdAddressPage() {
     try {
       const res = await searchRoadAddress(household_id, keyword);
       setResults(res.items);
+      setSearched(true);
     } catch (e) {
       if (e instanceof ApiError) {
         setError(e.message);
       }
       setResults([]);
+      // 검색 실패는 "결과 없음"이 아니므로 1b 대신 에러만 노출
+      setSearched(false);
     }
   };
 
