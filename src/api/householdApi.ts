@@ -16,6 +16,7 @@ export async function getEmergencyAddress(household_id: string) {
   );
 }
 
+// 명세 §5.1 현재 가구 조회
 export async function getCurrentHousehold() {
   return request<CurrentHouseholdResponse>("/households/current");
 }

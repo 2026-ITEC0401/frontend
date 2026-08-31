@@ -9,20 +9,36 @@ import { type AlertWebData } from "@/types/alert";
 import { getLatestAlarm, getUnreadCount } from "@/api/alarmApi";
 import { getDevices } from "@/api/deviceApi";
 import { getHouseholdId } from "@/lib/auth";
+import { getCurrentHousehold } from "@/api/householdApi";
+import type { CurrentHouseholdResponse } from "@/types/household";
 import type { RoomDevice } from "@/types/room";
 
 import { connectWs } from "@/lib/ws";
 import { toWebDataFromRealtime, toWebDataFromList } from "@/utils/alertMapper";
 
 import { useNavigate } from "react-router-dom";
+import { IS_MOCK_MODE } from "@/mocks/config";
 
 export default function MainPage() {
   const [currentAlert, setCurrentAlert] = useState<null | AlertWebData>(null);
   const [alertList, setAlertList] = useState<AlertWebData[]>([]);
   const [deviceList, setDeviceList] = useState<RoomDevice[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [household, setHousehold] = useState<CurrentHouseholdResponse | null>(
+    null,
+  );
+  const [checking, setChecking] = useState(!IS_MOCK_MODE);
   // WS로 이미 +1한 알림 id — 동일 알림 중복 수신 시 이중 카운트 방지
   const countedAlarmIds = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (IS_MOCK_MODE) return;
+
+    getCurrentHousehold()
+      .then((res) => setHousehold(res))
+      .catch(() => setHousehold(null))
+      .finally(() => setChecking(false));
+  }, []);
 
   useEffect(() => {
     const household_id = getHouseholdId();
@@ -75,10 +91,19 @@ export default function MainPage() {
     return () => ws.close();
   }, []);
 
-  const household_id = getHouseholdId();
   // 미연동 사용자 — 가구가 없으면 초대 코드 안내만 표시
-  if (!household_id) {
-    return <EmptyHouseholdView />;
+  if (checking) {
+    return null;
+  }
+
+  // 미연동
+  if (household?.household_link_status === "unlinked") {
+    return <EmptyHouseholdView variant="no-household" />;
+  }
+
+  // owner인데 주소 미등록
+  if (household?.onboarding?.next_action === "register_emergency_address") {
+    return <EmptyHouseholdView variant="no-address" />;
   }
 
   return (
@@ -133,19 +158,47 @@ export default function MainPage() {
   );
 }
 
-function EmptyHouseholdView() {
+function EmptyHouseholdView({
+  variant,
+}: {
+  variant: "no-household" | "no-address";
+}) {
   const navigate = useNavigate();
+
+  const config = {
+    "no-household": {
+      title: "등록된 가구가 없습니다",
+      desc: (
+        <>
+          가족에게 받은 초대 코드를
+          <br />
+          입력해 주세요.
+        </>
+      ),
+      buttonText: "초대 코드 입력",
+      to: "/signup/invite",
+    },
+    "no-address": {
+      title: "집 주소가 필요해요",
+      desc: (
+        <>
+          긴급 상황에 대비해
+          <br />집 주소를 등록해 주세요.
+        </>
+      ),
+      buttonText: "주소 등록",
+      to: "/signup/address",
+    },
+  }[variant];
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 px-5 pt-10 pb-25">
       <div className="rounded-2xl bg-white p-6 shadow-03">
-        <h1 className="text-head-03 text-gray-500">등록된 가구가 없습니다</h1>
-        <p className="mt-2 text-body-01 text-gray-300">
-          설정 › 가구 등록에서 시작하거나, <br />
-          가족에게 받은 초대 코드를 입력해 주세요.
-        </p>
+        <h1 className="text-head-03 text-gray-500">{config.title}</h1>
+        <p className="mt-2 text-body-01 text-gray-300">{config.desc}</p>
         <div className="mt-6">
-          <Button variant="dark" onClick={() => navigate("/signup/invite")}>
-            초대 코드 입력
+          <Button variant="dark" onClick={() => navigate(config.to)}>
+            {config.buttonText}
           </Button>
         </div>
       </div>
