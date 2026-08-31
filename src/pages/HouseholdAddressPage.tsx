@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import CompleteHeader from "@/components/CompleteHeader";
 import Button from "@/components/Button";
-import { type AddressSearchResult } from "@/types/household";
+import { type AddressSearchItem } from "@/types/household";
 import { mockAddressResults } from "@/mocks/household";
 
 export default function HouseholdAddressPage() {
   const [keyword, setKeyword] = useState("");
-  const [results, setResults] = useState<AddressSearchResult[]>([]);
-  const [selected, setSelected] = useState<AddressSearchResult | null>(null);
+  const [results, setResults] = useState<AddressSearchItem[]>([]);
+  const [selected, setSelected] = useState<AddressSearchItem | null>(null);
   const [detail, setDetail] = useState("");
   const [searched, setSearched] = useState(false);
   const navigate = useNavigate();
@@ -70,7 +70,7 @@ export default function HouseholdAddressPage() {
                 {selected.road_address}
               </p>
               <p className="mt-1 text-body-02 text-gray-300">
-                지번 · {selected.jibun_address}
+                지번 · {selected.building_name}
               </p>
             </div>
 
@@ -137,7 +137,7 @@ export default function HouseholdAddressPage() {
                     {item.road_address}
                   </p>
                   <p className="mt-1 text-body-01 text-gray-300">
-                    지번 · {item.jibun_address}
+                    지번 · {item.building_name}
                   </p>
                 </button>
               ))}
