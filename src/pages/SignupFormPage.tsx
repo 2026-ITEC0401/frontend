@@ -5,6 +5,9 @@ import { useState } from "react";
 import type { SignupType } from "@/types/signup";
 import { Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { signup } from "@/api/authApi";
+import { ApiError } from "@/lib/api";
+import { setTokens, setHouseholdId } from "@/lib/auth";
 
 interface SignupFormPageProps {
   signupType: SignupType;
@@ -19,7 +22,42 @@ export default function SignupFormPage({ signupType }: SignupFormPageProps) {
   const [agreed, setAgreed] = useState(false);
   const navigate = useNavigate();
   const isNew = signupType === "new_household";
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
+  async function handleSubmit() {
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await signup({
+        login_id,
+        name,
+        phone_number: phoneNumber,
+        password,
+        signup_type: signupType,
+        household_name: isNew ? `${name} 가구` : undefined,
+        terms_service_agreed: agreed,
+        privacy_agreed: agreed,
+      });
+
+      setTokens(res.tokens.access_token, res.tokens.refresh_token);
+
+      if (res.user.household_id) {
+        setHouseholdId(res.user.household_id);
+      }
+
+      // 신규 가구 → 주소 등록 / 가족 → 초대 코드
+      navigate(isNew ? "/signup/address" : "/signup/invite");
+    } catch (e) {
+      if (e instanceof ApiError) {
+        setError(e.message);
+      } else {
+        setError("알 수 없는 오류가 발생했어요.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
   // 빈 칸 없음 + 비밀번호 일치. 상세 규칙(§2.3)은 서버 field_errors로 처리
   const isFormValid =
     name.trim() !== "" &&
@@ -132,10 +170,12 @@ export default function SignupFormPage({ signupType }: SignupFormPageProps) {
             서비스 이용약관 · 개인정보 동의 (필수)
           </span>
         </button>
+
+        {error && <p className="text-body-02 text-red-200">{error}</p>}
         <Button
           variant="dark"
-          onClick={() => navigate(isNew ? "/signup/address" : "/signup/invite")}
-          disabled={!isFormValid}
+          onClick={handleSubmit}
+          disabled={!isFormValid || loading}
         >
           가입 완료
         </Button>
