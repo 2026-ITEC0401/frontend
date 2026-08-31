@@ -3,10 +3,38 @@ import { Info } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CompleteHeader from "@/components/CompleteHeader";
+import { linkPreview } from "@/api/householdApi";
+import { ApiError } from "@/lib/api";
 
 export default function InviteCodePage() {
   const [code, setCode] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  async function handleFindHousehold() {
+    setError(null);
+    setLoading(true);
+    try {
+      const preview = await linkPreview(code);
+
+      if (!preview.linkable) {
+        setError("연동할 수 없는 코드예요. 다시 확인해 주세요.");
+        return;
+      }
+
+      // 미리보기 결과 + 코드를 확인 화면으로 전달
+      navigate("/signup/link", { state: { preview, inviteCode: code } });
+    } catch (e) {
+      if (e instanceof ApiError) {
+        setError(e.message);
+      } else {
+        setError("알 수 없는 오류가 발생했어요.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 pb-16">
@@ -52,11 +80,11 @@ export default function InviteCodePage() {
           </p>
         </div>
         <div className="flex-1" />
-
+        {error && <p className="text-body-02 text-red-200">{error}</p>}
         <Button
           variant="dark"
-          onClick={() => navigate("/signup/link")}
-          disabled={code.length !== 6}
+          onClick={handleFindHousehold}
+          disabled={code.length !== 6 || loading}
         >
           가구 찾기
         </Button>
