@@ -21,7 +21,11 @@ export default function SignupTypePage() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div
+          role="radiogroup"
+          aria-label="가입 유형 선택"
+          className="flex flex-col gap-3"
+        >
           <TypeCard
             title="신규 가구 등록"
             description={

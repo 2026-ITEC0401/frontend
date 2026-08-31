@@ -15,7 +15,7 @@ const ALERT_POPUP_CONFIG = {
     iconBgColor: "bg-red-100",
     infoBgColor: "bg-red-300",
     textColor: "text-red-200",
-    title: "화재 경보기 울림",
+    title: "비상벨소리 울림",
     icon: <img src={EmergencyImg} alt="긴급 상황 아이콘" className="size-48" />,
     vibratePattern: [500, 200, 500, 200, 500],
   },

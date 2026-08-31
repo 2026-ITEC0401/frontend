@@ -14,7 +14,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  async function handleSubmit() {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
     setError(null);
     setLoading(true);
     try {
@@ -58,7 +59,7 @@ export default function LoginPage() {
         <br />
         로그인해 주세요.
       </p>
-      <div className="flex flex-col gap-3">
+      <form onSubmit={handleSubmit} className="flex flex-1 flex-col gap-3">
         <Input
           id="login_id"
           label="아이디"
@@ -78,13 +79,13 @@ export default function LoginPage() {
           placeholder="비밀번호"
           autoComplete="current-password"
         />
-      </div>
 
-      {error && <p className="text-red-200">{error}</p>}
-      <div className="flex-1" />
-      <Button variant="dark" onClick={handleSubmit} disabled={loading}>
-        로그인
-      </Button>
+        {error && <p className="text-red-200">{error}</p>}
+        <div className="flex-1" />
+        <Button variant="dark" type="submit" disabled={loading}>
+          로그인
+        </Button>
+      </form>
     </div>
   );
 }

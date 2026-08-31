@@ -14,6 +14,8 @@ export default function TypeCard({
   return (
     <button
       type="button"
+      role="radio"
+      aria-checked={isSelected}
       onClick={onClick}
       className={`flex w-full items-start gap-3 rounded-2xl bg-white p-5  text-left ${
         isSelected ? "border-2 border-main-200" : "border-2 border-border"

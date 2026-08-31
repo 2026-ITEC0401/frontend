@@ -25,7 +25,8 @@ export default function SignupFormPage({ signupType }: SignupFormPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit() {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
     setError(null);
     setLoading(true);
     try {
@@ -72,7 +73,10 @@ export default function SignupFormPage({ signupType }: SignupFormPageProps) {
     <div className="flex min-h-screen flex-col bg-gray-100 pb-16">
       <Header title="회원가입" />
 
-      <div className="flex flex-1 flex-col gap-6 px-5 pt-4">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-1 flex-col gap-6 px-5 pt-4"
+      >
         <div className="flex rounded-xl bg-border text-subtitle-03 p-1">
           <div
             className={`flex-1 rounded-lg py-3 text-center ${
@@ -156,6 +160,8 @@ export default function SignupFormPage({ signupType }: SignupFormPageProps) {
         <div className="flex-1" />
         <button
           type="button"
+          role="checkbox"
+          aria-checked={agreed}
           onClick={() => setAgreed(!agreed)}
           className="flex items-center gap-3 text-left"
         >
@@ -172,14 +178,10 @@ export default function SignupFormPage({ signupType }: SignupFormPageProps) {
         </button>
 
         {error && <p className="text-body-02 text-red-200">{error}</p>}
-        <Button
-          variant="dark"
-          onClick={handleSubmit}
-          disabled={!isFormValid || loading}
-        >
+        <Button variant="dark" type="submit" disabled={!isFormValid || loading}>
           가입 완료
         </Button>
-      </div>
+      </form>
     </div>
   );
 }

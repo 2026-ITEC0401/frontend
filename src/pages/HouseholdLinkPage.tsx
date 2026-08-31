@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Button from "@/components/Button";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { link } from "@/api/householdApi";
 import { ApiError } from "@/lib/api";
 import { setHouseholdId } from "@/lib/auth";
@@ -20,8 +20,7 @@ export default function HouseholdLinkPage() {
   const [loading, setLoading] = useState(false);
 
   if (!state) {
-    navigate("/signup/invite", { replace: true });
-    return null;
+    return <Navigate to="/signup/invite" replace />;
   }
 
   // 이 아래는 state가 확실히 있는 상태
