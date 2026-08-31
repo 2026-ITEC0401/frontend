@@ -103,3 +103,24 @@ export interface AddressSearchResponse {
   total_count: number;
   items: AddressSearchItem[];
 }
+
+// 명세 §5.1 GET /households/current
+export interface CurrentHouseholdResponse {
+  household_link_status: "linked" | "unlinked";
+  household: {
+    household_id: string;
+    name: string;
+    created_at: string;
+    member_count: number;
+  } | null;
+  membership: {
+    role: HouseholdRole;
+    linked_at: string;
+  } | null;
+  onboarding: {
+    required: boolean;
+    missing_steps: string[];
+    next_action: "register_emergency_address" | "wait_for_owner" | null;
+    can_edit_emergency_address: boolean;
+  } | null;
+}
