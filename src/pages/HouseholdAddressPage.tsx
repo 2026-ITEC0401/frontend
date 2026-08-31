@@ -4,7 +4,9 @@ import { Search } from "lucide-react";
 import CompleteHeader from "@/components/CompleteHeader";
 import Button from "@/components/Button";
 import { type AddressSearchItem } from "@/types/household";
-import { mockAddressResults } from "@/mocks/household";
+import { searchRoadAddress, updateEmergencyAddress } from "@/api/householdApi";
+import { getHouseholdId } from "@/lib/auth";
+import { ApiError } from "@/lib/api";
 
 export default function HouseholdAddressPage() {
   const [keyword, setKeyword] = useState("");
@@ -12,16 +14,55 @@ export default function HouseholdAddressPage() {
   const [selected, setSelected] = useState<AddressSearchItem | null>(null);
   const [detail, setDetail] = useState("");
   const [searched, setSearched] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     setSearched(true);
     setSelected(null);
-    // 목업: "능동로" 포함하고 "9999" 없으면 결과 있음
-    if (keyword.includes("능동로") && !keyword.includes("9999")) {
-      setResults(mockAddressResults);
-    } else {
+    setError(null);
+
+    const household_id = getHouseholdId();
+    if (!household_id) return;
+
+    try {
+      const res = await searchRoadAddress(household_id, keyword);
+      setResults(res.items);
+    } catch (e) {
+      if (e instanceof ApiError) {
+        setError(e.message);
+      }
       setResults([]);
+    }
+  };
+
+  const handleRegister = async () => {
+    if (!selected) return;
+
+    const household_id = getHouseholdId();
+    if (!household_id) return;
+
+    setError(null);
+    setLoading(true);
+    try {
+      await updateEmergencyAddress(household_id, {
+        postal_code: selected.postal_code,
+        road_address: selected.road_address,
+        detail_address: detail,
+        address_provider: "juso_go_kr",
+        provider_reference: selected.provider_reference,
+        detail_source: "manual",
+      });
+      navigate("/", { replace: true });
+    } catch (e) {
+      if (e instanceof ApiError) {
+        setError(e.message);
+      } else {
+        setError("주소 등록에 실패했어요.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,7 +111,7 @@ export default function HouseholdAddressPage() {
                 {selected.road_address}
               </p>
               <p className="mt-1 text-body-02 text-gray-300">
-                지번 · {selected.building_name}
+                {selected.building_name}
               </p>
             </div>
 
@@ -137,7 +178,7 @@ export default function HouseholdAddressPage() {
                     {item.road_address}
                   </p>
                   <p className="mt-1 text-body-01 text-gray-300">
-                    지번 · {item.building_name}
+                    {item.building_name}
                   </p>
                 </button>
               ))}
@@ -154,11 +195,11 @@ export default function HouseholdAddressPage() {
             다시 열면 이 화면부터 시작합니다.
           </p>
         </div>
-
+        {error && <p className="text-red-200">{error}</p>}
         <Button
           variant="dark"
-          onClick={() => navigate("/")}
-          disabled={!selected}
+          onClick={handleRegister}
+          disabled={!selected || loading}
         >
           이 주소로 등록
         </Button>
