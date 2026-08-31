@@ -178,11 +178,7 @@ export default function SignupFormPage({ signupType }: SignupFormPageProps) {
         </button>
 
         {error && <p className="text-body-02 text-red-200">{error}</p>}
-        <Button
-          variant="dark"
-          type="submit"
-          disabled={!isFormValid || loading}
-        >
+        <Button variant="dark" type="submit" disabled={!isFormValid || loading}>
           가입 완료
         </Button>
       </form>
