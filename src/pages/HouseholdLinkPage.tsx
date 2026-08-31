@@ -1,14 +1,51 @@
 import Header from "@/components/Header";
 import Button from "@/components/Button";
-import { mockLinkPreview } from "@/mocks/household";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { link } from "@/api/householdApi";
+import { ApiError } from "@/lib/api";
+import { setHouseholdId } from "@/lib/auth";
+import type { HouseholdLinkPreview } from "@/types/household";
+import { useState } from "react";
 
 export default function HouseholdLinkPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state as {
+    preview: HouseholdLinkPreview;
+    inviteCode: string;
+  } | null;
+
   const ROOM_LABELS = ["현관", "거실", "안방", "화장실"];
-  const registeredAt = mockLinkPreview.household?.created_at
-    .slice(0, 7)
-    .replace("-", ".");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  if (!state) {
+    navigate("/signup/invite", { replace: true });
+    return null;
+  }
+
+  // 이 아래는 state가 확실히 있는 상태
+  const household = state.preview.household;
+  const inviteCode = state.inviteCode;
+  const registeredAt = household?.created_at.slice(0, 7).replace("-", ".");
+
+  async function handleLink() {
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await link(inviteCode);
+      setHouseholdId(res.household_id);
+      navigate("/", { replace: true });
+    } catch (e) {
+      if (e instanceof ApiError) {
+        setError(e.message);
+      } else {
+        setError("알 수 없는 오류가 발생했어요.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 pb-16">
@@ -19,10 +56,8 @@ export default function HouseholdLinkPage() {
             <p className="text-subtitle-03 text-gray-300">연동 대상 가구</p>
           </div>
           <div className="mb-3">
-            <h1 className="text-head-03 text-gray-500">
-              {mockLinkPreview.household?.name}
-            </h1>
-            <p className="text-gray-300">{`가구원 ${mockLinkPreview.household?.member_count}명 · 등록일 ${registeredAt}`}</p>
+            <h1 className="text-head-03 text-gray-500">{household?.name}</h1>
+            <p className="text-gray-300">{`가구원 ${household?.member_count}명 · 등록일 ${registeredAt}`}</p>
           </div>
           <div className="flex flex-wrap gap-2">
             {ROOM_LABELS.map((room) => (
@@ -43,7 +78,8 @@ export default function HouseholdLinkPage() {
           </p>
         </div>
         <div className="flex-1" />
-        <Button variant="dark" onClick={() => navigate("/")}>
+        {error && <p className="text-body-02 text-red-200">{error}</p>}
+        <Button variant="dark" onClick={handleLink} disabled={loading}>
           연동하기
         </Button>
       </div>

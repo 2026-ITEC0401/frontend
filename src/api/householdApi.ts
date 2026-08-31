@@ -4,6 +4,8 @@ import type {
   EmergencyAddress,
   InviteCodeResponse,
   MembersResponse,
+  HouseholdLinkPreview,
+  HouseholdLinkResponse,
 } from "@/types/household";
 
 export async function getEmergencyAddress(household_id: string) {
@@ -50,4 +52,19 @@ export async function rotateInviteCode(household_id: string) {
     `/households/${household_id}/invite-code/rotate`,
     { method: "POST" },
   );
+}
+
+// 명세 §5.3 초대 코드로 가구 미리보기
+export async function linkPreview(invite_code: string) {
+  return request<HouseholdLinkPreview>("/households/link/preview", {
+    method: "POST",
+    body: { invite_code },
+  });
+}
+
+export async function link(invite_code: string) {
+  return request<HouseholdLinkResponse>("/households/link", {
+    method: "POST",
+    body: { invite_code },
+  });
 }
