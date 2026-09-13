@@ -1,16 +1,82 @@
-# React + Vite
+# Hearo — 청각장애인용 환경음 인식 IoT 알림 서비스 (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+소리를 듣지 못하는 사용자가 화재 경보, 도어락, 아기 울음 같은 생활 소리를 놓치지 않도록 알려주는 서비스입니다.
+집 안 각 방의 ESP32 노드와 거실의 라즈베리파이가 소리를 수집하고, AI 모델이 소리를 분류한 뒤 웹앱과 LED로 알림을 전달합니다.
 
-Currently, two official plugins are available:
+이 저장소는 사용자가 실제로 마주하는 **웹앱(프론트엔드)** 코드입니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 시연 영상: https://www.youtube.com/watch?v=7a42_7KuAz0
+- 한이음 ICT 멘토링 우수 프로젝트 선정
+- 한국정보기술학회 하계종합학술대회 대학생 논문경진대회 동상 (2026.06)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 시스템 구조
+ESP32 노드 (각 방) ──┐
+├─ MQTT ─→ 라즈베리파이 (YAMNet 소리 분류) ─→ EC2 (Mosquitto + 로거) ─→ DynamoDB
+ESP32 노드 (각 방) ──┘ │
+├─→ ESP32 LED 알림
+└─→ 웹앱 (이 저장소)
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| 파트 | 역할 |
+|---|---|
+| 하드웨어 | ESP32 노드 3대, 라즈베리파이 허브, LED 알림 |
+| AI | YAMNet 기반 소리 분류 (정확도 약 90.5%) |
+| 인프라 | AWS EC2 (Mosquitto 브로커), DynamoDB, S3 |
+| 프론트엔드 | 알림 수신 웹앱, 알림 이력, 기기 관리, 가족 공유 — 이 저장소 |
+
+---
+
+## 기술 스택
+
+- React, TypeScript
+- Tailwind CSS
+- 상태 관리: useState / Context
+- AWS S3 배포
+
+---
+
+## 주요 기능
+
+- 실시간 소리 알림 수신 (팝업 + 진동)
+- 알림 종류별 구분: 긴급 / 주변소음 / 방문자
+- 7일간 알림 이력 조회
+- 기기 연결 상태 및 LED·진동 알림 설정
+- 가족 간 알림 내역 공유
+- 긴급 알림 시 112·119 바로 연결
+
+---
+
+## 설계
+
+### 알림 전달 방식
+
+알림을 색으로만 구분하면 색각 이상 사용자가 구분하지 못하거나, 화면을 보고 있지 않을 때 전달되지 않는 문제가 있습니다.
+청각 정보가 차단된 사용자를 대상으로 하는 서비스이므로, 하나의 알림을 네 가지 채널로 동시에 전달하도록 설계했습니다.
+
+| 채널 | 내용 |
+|---|---|
+| 색 | 긴급(빨강) / 주변소음(노랑) / 방문자(파랑) 3개 카테고리 |
+| 아이콘 | 경광등, 스피커, 자물쇠 등 형태가 뚜렷하게 다른 픽토그램 |
+| 텍스트 | 소리 종류, 발생 위치, 시각 |
+| 진동 | 화면을 보고 있지 않아도 전달 |
+
+긴급 알림에서는 112·119 연결 버튼을 상세 화면에 배치해, 알림을 받은 직후 다음 행동으로 이어지도록 했습니다.
+
+### 데이터 계층 분리
+
+Firebase에서 AWS로 전환하면서 데이터 소스가 바뀌었습니다.
+컴포넌트가 데이터 소스를 직접 호출하지 않고 별도 데이터 접근 계층을 통하도록 구성해, API 규격 확정 전에는 목 데이터로 화면을 먼저 완성하고 이후 데이터 계층만 교체했습니다.
+
+### 상태 관리
+
+공유가 필요한 상태가 제한적이라 전역 상태 라이브러리 없이 useState와 Context로 관리합니다.
+
+---
+
+## 변경 이력
+
+- JavaScript → TypeScript 전면 마이그레이션 (Emotion → Tailwind CSS 전환 포함)
+- Firebase → AWS 전환 및 S3 배포
+- 7일간 알림 이력 조회, 가족 간 알림 공유 기능 추가
