@@ -159,9 +159,11 @@ export default function DeviceSettingPage() {
       </div>
 
       <div className="flex flex-col gap-4 px-5">
+        {/* 토글은 희망값(desired)이 아니라 실제 연결 상태(ui_status)를 표시.
+            OFF 상태에서 켜면 enabled=true 로 재연결 요청 */}
         <SettingRow label="기기 연결 상태">
           <Toggle
-            checked={device.desired_mqtt_connected}
+            checked={device.ui_status === "connected"}
             disabled={!isOwner || pending !== null}
             loading={pending === "connection"}
             onChange={toggleConnection}
